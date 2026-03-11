@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    volumes:
+      # Mount leaderboard and datasets to allow real-time host machine edits and persistence
+      - ./server/leaderboard.json:/usr/src/app/leaderboard.json
+      - ./data:/usr/src/app/../data
+
+  frontend:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_ROUND_TIME=3
+      - VITE_GAME_TITLE="Beat the AI"
+      - VITE_GAME_SUBTITLE="Data Cleaning Challenge"
+      - VITE_ROUND1_TITLE="Fix The Dataset"
+      - VITE_ROUND2_TITLE="Beat the AI"
+      - VITE_WIN_THRESHOLD=200
+    # Ensure client rebuilds pick up changes to src if we wanted to dev live (optional)
+    volumes:
+      - ./client/src:/app/src
+      - ./client/public:/app/public
+    depends_on:
+      - backend

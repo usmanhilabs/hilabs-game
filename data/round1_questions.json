@@ -1,0 +1,43 @@
+[
+  {
+    "dataset": [
+      ["Dr John Doe", "12345"],
+      ["Dr. John Doe", "12345"],
+      ["John Doe MD", "12345"]
+    ],
+    "question": "How many unique doctors exist?",
+    "options": ["1", "2", "3"],
+    "answer": "1"
+  },
+  {
+    "dataset": [
+      ["City Hospital", "New York", "NY"],
+      ["city hospital", "new york", "ny"],
+      ["City Hosp", "New York", "NY"]
+    ],
+    "question": "How many unique hospitals exist?",
+    "options": ["1", "2", "3"],
+    "answer": "1"
+  },
+  {
+    "dataset": [
+      ["Alice Smith", "1990-05-12", "F"],
+      ["Alice Smith", "12/05/1990", "Female"],
+      ["A. Smith", "1990-05-12", "F"],
+      ["Bob Jones", "1985-11-20", "M"]
+    ],
+    "question": "How many unique patients exist?",
+    "options": ["1", "2", "4"],
+    "answer": "2"
+  },
+  {
+    "dataset": [
+      ["123 Main St", "Apt 4B", "Springfield"],
+      ["123 main street", "apt 4b", "springfield"],
+      ["123 Main St.", "#4B", "Springfield"]
+    ],
+    "question": "How many unique addresses exist?",
+    "options": ["1", "2", "3"],
+    "answer": "1"
+  }
+]

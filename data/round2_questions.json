@@ -1,0 +1,91 @@
+[
+    {
+        "dataset": [
+            [
+                "Apollo",
+                "Delhi",
+                "MH"
+            ],
+            [
+                "Apollo",
+                "Delhi",
+                "DL"
+            ]
+        ],
+        "question": "What is wrong with the AI cleaned dataset?",
+        "options": [
+            "Duplicate hospital",
+            "Incorrect state for Delhi",
+            "Nothing wrong"
+        ],
+        "answer": "Incorrect state for Delhi"
+    },
+    {
+        "dataset": [
+            [
+                "Dr. Strange",
+                "Neurology",
+                "New York"
+            ],
+            [
+                "Dr. Strange",
+                "Cardiology",
+                "New York"
+            ]
+        ],
+        "question": "What is the likely AI extraction error here?",
+        "options": [
+            "Wrong doctor name",
+            "Duplicate city",
+            "Conflicting specialty for same doctor"
+        ],
+        "answer": "Conflicting specialty for same doctor"
+    },
+    {
+        "dataset": [
+            [
+                "Jane Doe",
+                "555-0199",
+                "jane@email.com"
+            ],
+            [
+                "Jane Doe",
+                "555-0199",
+                "jane.doe@email.com"
+            ],
+            [
+                "Jane Doe",
+                "555-1234",
+                "jane@email.com"
+            ]
+        ],
+        "question": "What data inconsistency did the AI miss?",
+        "options": [
+            "Missing phone numbers",
+            "Multiple phone numbers and emails for same person",
+            "Invalid email format"
+        ],
+        "answer": "Multiple phone numbers and emails for same person"
+    },
+    {
+        "dataset": [
+            [
+                "Max Health",
+                "100 Beds",
+                "Active"
+            ],
+            [
+                "Max Healthcare",
+                "100 Beds",
+                "Inactive"
+            ]
+        ],
+        "question": "Which data point makes this a conflicting deduplication?",
+        "options": [
+            "Different name formats",
+            "Conflicting Active/Inactive status",
+            "Same bed count"
+        ],
+        "answer": "Conflicting Active/Inactive status"
+    }
+]
