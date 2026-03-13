@@ -66,6 +66,7 @@ const Game = ({ playerName, onEnd }) => {
         } else {
             const penalty = points / 2;
             setScore(prev => prev - penalty);
+            setTimeLeft(prev => Math.max(0, prev - 3));
         }
 
         // Move to next question, loop back to start if we run out

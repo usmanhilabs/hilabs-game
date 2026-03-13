@@ -101,7 +101,7 @@ function makeAddressDedupQuestions() {
         });
     }
 
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < 2; i++) {
         const num = Math.floor(Math.random() * 9000) + 100;
         const name = pick(streetNames);
         const type = pick(types);
@@ -208,7 +208,7 @@ function makeConflictQuestions() {
     }
 
     // Variation 3: Conflicting Patient Name
-    for (let i = 0; i < 1; i++) {
+    for (let i = 0; i < 2; i++) {
         const claimNum = `CLM-${randInt(1000, 9999)}`;
         const n1 = `${pick(firstNames)} ${pick(lastNames)}`;
         const n2 = `${pick(firstNames)} ${pick(lastNames)}`;
@@ -283,17 +283,177 @@ function makeConflictQuestions() {
     return questions;
 }
 
+// ────────────────────────────────────────────────────────────────────────────
+// PATTERN 4: Communication Channels
+// ────────────────────────────────────────────────────────────────────────────
+function makeCommunicationQuestions() {
+    const questions = [];
+    const domains = ['gmail.com', 'yahoo.com', 'clinic.org'];
+
+    // Variation 1: 1 distinct pair (duplicates with different formats)
+    for (let i=0; i<2; i++) {
+        const first = pick(firstNames), last = pick(lastNames);
+        const phone = randInt(1000000000, 9999999999).toString();
+        const email = `${first.toLowerCase()}.${last.toLowerCase()}@${pick(domains)}`;
+        
+        const p1 = `(${phone.substring(0,3)}) ${phone.substring(3,6)}-${phone.substring(6)}`;
+        const p2 = `${phone.substring(0,3)}-${phone.substring(3,6)}-${phone.substring(6)}`;
+        const p3 = phone;
+        
+        const q = {
+            dataset: [
+                [`${first} ${last}`, p1, email],
+                [`${first} ${last}`, p2, email.toUpperCase()],
+                [`${first} ${last}`, p3, email]
+            ],
+            question: "If we normalize the formatting, how many distinct communication channels (unique phone + email pairs) exist?",
+            options: shuffle(["1", "2", "3"]),
+            answer: "1"
+        };
+        q.dataset.unshift(['Patient', 'Phone', 'Email']);
+        questions.push(q);
+    }
+
+    // Variation 2: 2 distinct pairs
+    for (let i=0; i<2; i++) {
+        const first = pick(firstNames), last = pick(lastNames);
+        const pA = `555-010-0001`;
+        const pB = `(555) 010-0001`;
+        const pC = `555-010-0002`;
+        const emailA = `test@test.com`;
+        const emailB = `other@test.com`;
+
+        const q = {
+            dataset: [
+                [`${first} ${last}`, pA, emailA],
+                [`${first} ${last}`, pB, emailA],
+                [`${first} ${last}`, pC, emailB]
+            ],
+            question: "If we normalize the formatting, how many distinct communication channels (unique phone + email pairs) exist?",
+            options: shuffle(["1", "2", "3"]),
+            answer: "2"
+        };
+        q.dataset.unshift(['Patient', 'Phone', 'Email']);
+        questions.push(q);
+    }
+
+    return questions;
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// PATTERN 5: Appointment Logs
+// ────────────────────────────────────────────────────────────────────────────
+function makeAppointmentQuestions() {
+    const questions = [];
+    const times = ['09:00 AM - 09:45 AM', '10:00 AM - 11:00 AM', '11:30 AM - 12:30 PM', '01:00 PM - 02:00 PM', '02:30 PM - 03:30 PM'];
+    const docs = ['Dr. Smith', 'Dr. Jones', 'Dr. Lee'];
+
+    const options = [
+        "Nothing is wrong",
+        "Duplicate entries",
+        "Conflicting time (same patient can't have conflicting appointment)",
+        "Missing details"
+    ];
+
+    // Sub-pattern: Conflicting time
+    for (let i = 0; i < 2; i++) {
+        const patient = uniqueName();
+        const date = `2024-05-${pick(days)}`;
+        const time1 = '09:00 AM - 10:00 AM';
+        const time2 = '09:30 AM - 10:30 AM';
+        const d1 = docs[0];
+        const d2 = docs[1];
+
+        const q = {
+            dataset: [
+                [patient, date, time1, d1],
+                [patient, date, time2, d2]
+            ],
+            question: "Health provider appointment logs are given, what's the issue with the data?",
+            options: shuffle([...options]),
+            answer: "Conflicting time (same patient can't have conflicting appointment)"
+        };
+        q.dataset.unshift(['Patient', 'Date', 'Time', 'Doctor']);
+        questions.push(q);
+    }
+
+    // Sub-pattern: Duplicate entries
+    for (let i = 0; i < 2; i++) {
+        const patient = uniqueName();
+        const date = `2024-05-${pick(days)}`;
+        const time = pick(times);
+        const doc = pick(docs);
+
+        const q = {
+            dataset: [
+                [patient, date, time, doc],
+                [patient, date, time, doc]
+            ],
+            question: "Health provider appointment logs are given, what's the issue with the data?",
+            options: shuffle([...options]),
+            answer: "Duplicate entries"
+        };
+        q.dataset.unshift(['Patient', 'Date', 'Time', 'Doctor']);
+        questions.push(q);
+    }
+    
+    // Sub-pattern: missing details
+    for (let i = 0; i < 2; i++) {
+        const patient = uniqueName();
+        const date = `2024-05-${pick(days)}`;
+        const time = pick(times);
+        const doc = pick(docs);
+
+        const q = {
+            dataset: [
+                [patient, date, time, doc],
+                [patient, date, "", doc]
+            ],
+            question: "Health provider appointment logs are given, what's the issue with the data?",
+            options: shuffle([...options]),
+            answer: "Missing details"
+        };
+        q.dataset.unshift(['Patient', 'Date', 'Time', 'Doctor']);
+        questions.push(q);
+    }
+
+    // Sub-pattern: Nothing is wrong
+    for (let i = 0; i < 2; i++) {
+        const patient = uniqueName();
+        const date = `2024-05-${pick(days)}`;
+        const time1 = times[0];
+        const time2 = times[1];
+        const doc = pick(docs);
+
+        const q = {
+            dataset: [
+                [patient, date, time1, doc],
+                [patient, date, time2, doc]
+            ],
+            question: "Health provider appointment logs are given, what's the issue with the data?",
+            options: shuffle([...options]),
+            answer: "Nothing is wrong"
+        };
+        q.dataset.unshift(['Patient', 'Date', 'Time', 'Doctor']);
+        questions.push(q);
+    }
+
+    return questions;
+}
+
 // ── Generate and save ─────────────────────────────────────────────────────
 const allQuestions = [
     ...makePatientDedupQuestions(),
     ...makeAddressDedupQuestions(),
-    ...makeConflictQuestions()
+    ...makeConflictQuestions(),
+    ...makeCommunicationQuestions(),
+    ...makeAppointmentQuestions()
 ];
 
 // Shuffle dataset rows within each question if there's no header, or shuffle the data rows keeping header intact.
 allQuestions.forEach(q => { 
-    // pattern 3 has headers 'Claim ID' / 'Doctor'. For others, plain arrays.
-    if(q.dataset[0].includes('Claim ID') || q.dataset[0].includes('Doctor') || q.dataset[0].includes('Hospital') || q.dataset[0].includes('Name')) {
+    // pattern 3, 4, 5 typically have headers. We check for common ones.
+    if(q.dataset[0].includes('Claim ID') || q.dataset[0].includes('Doctor') || q.dataset[0].includes('Hospital') || q.dataset[0].includes('Name') || q.dataset[0].includes('Patient')) {
         const header = q.dataset[0];
         const dataRows = shuffle(q.dataset.slice(1));
         q.dataset = [header, ...dataRows];

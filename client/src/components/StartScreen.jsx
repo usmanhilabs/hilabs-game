@@ -32,7 +32,7 @@ const StartScreen = ({ onStart, onViewLeaderboard }) => {
                     <span style={{ color: 'var(--color-success)', fontWeight: 'bold', fontSize: '1.2rem' }}>+10 Points</span> for correct answers
                 </div>
                 <div>
-                    <span style={{ color: 'var(--color-error)', fontWeight: 'bold', fontSize: '1.2rem' }}>-5 Points</span> for wrong answers (Negative Marking!)
+                    <span style={{ color: 'var(--color-error)', fontWeight: 'bold', fontSize: '1.2rem' }}>-5 Points and -3 Seconds</span> for wrong answers
                 </div>
             </div>
 
