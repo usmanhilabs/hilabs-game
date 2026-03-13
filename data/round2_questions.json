@@ -1,91 +1,4362 @@
 [
-    {
-        "dataset": [
-            [
-                "Apollo",
-                "Delhi",
-                "MH"
-            ],
-            [
-                "Apollo",
-                "Delhi",
-                "DL"
-            ]
-        ],
-        "question": "What is wrong with the AI cleaned dataset?",
-        "options": [
-            "Duplicate hospital",
-            "Incorrect state for Delhi",
-            "Nothing wrong"
-        ],
-        "answer": "Incorrect state for Delhi"
-    },
-    {
-        "dataset": [
-            [
-                "Dr. Strange",
-                "Neurology",
-                "New York"
-            ],
-            [
-                "Dr. Strange",
-                "Cardiology",
-                "New York"
-            ]
-        ],
-        "question": "What is the likely AI extraction error here?",
-        "options": [
-            "Wrong doctor name",
-            "Duplicate city",
-            "Conflicting specialty for same doctor"
-        ],
-        "answer": "Conflicting specialty for same doctor"
-    },
-    {
-        "dataset": [
-            [
-                "Jane Doe",
-                "555-0199",
-                "jane@email.com"
-            ],
-            [
-                "Jane Doe",
-                "555-0199",
-                "jane.doe@email.com"
-            ],
-            [
-                "Jane Doe",
-                "555-1234",
-                "jane@email.com"
-            ]
-        ],
-        "question": "What data inconsistency did the AI miss?",
-        "options": [
-            "Missing phone numbers",
-            "Multiple phone numbers and emails for same person",
-            "Invalid email format"
-        ],
-        "answer": "Multiple phone numbers and emails for same person"
-    },
-    {
-        "dataset": [
-            [
-                "Max Health",
-                "100 Beds",
-                "Active"
-            ],
-            [
-                "Max Healthcare",
-                "100 Beds",
-                "Inactive"
-            ]
-        ],
-        "question": "Which data point makes this a conflicting deduplication?",
-        "options": [
-            "Different name formats",
-            "Conflicting Active/Inactive status",
-            "Same bed count"
-        ],
-        "answer": "Conflicting Active/Inactive status"
-    }
+  {
+    "dataset": [
+      [
+        "Max Medical Center",
+        "Seattle",
+        "OR"
+      ]
+    ],
+    "question": "What did the AI get wrong in this hospital record?",
+    "options": [
+      "Nothing is wrong",
+      "Duplicate hospital entry",
+      "Wrong state code for Seattle (should be WA)"
+    ],
+    "answer": "Wrong state code for Seattle (should be WA)"
+  },
+  {
+    "dataset": [
+      [
+        "Dr. Alice Jones",
+        "Radiology",
+        "Delhi"
+      ],
+      [
+        "Dr. Alice Jones",
+        "Orthopedics",
+        "Delhi"
+      ]
+    ],
+    "question": "What error did the AI make in this doctor record?",
+    "options": [
+      "Conflicting specialties for same doctor (Radiology vs Orthopedics)",
+      "Wrong doctor name format",
+      "City field is duplicated"
+    ],
+    "answer": "Conflicting specialties for same doctor (Radiology vs Orthopedics)"
+  },
+  {
+    "dataset": [
+      [
+        "Claim #7303",
+        "David Brown",
+        "$1948",
+        "ACTIVE"
+      ],
+      [
+        "Claim #7303",
+        "David Brown",
+        "$1948",
+        "CANCELLED"
+      ]
+    ],
+    "question": "The AI kept both records. What's critically wrong?",
+    "options": [
+      "Name format is inconsistent",
+      "Claim amount is incorrect",
+      "Same claim cannot be both ACTIVE and CANCELLED"
+    ],
+    "answer": "Same claim cannot be both ACTIVE and CANCELLED"
+  },
+  {
+    "dataset": [
+      [
+        "Patient: 5180",
+        "Lab: HbA1c",
+        "Date: 2024-07-20",
+        "5.5% (NORMAL)"
+      ],
+      [
+        "Patient: 5180",
+        "Lab: HbA1c",
+        "Date: 2024-07-20",
+        "8.3% (DIABETIC)"
+      ]
+    ],
+    "question": "What is the most dangerous AI error in this lab record?",
+    "options": [
+      "Lab test name is abbreviated",
+      "Conflicting HbA1c results for same patient on same date",
+      "Date format is inconsistent"
+    ],
+    "answer": "Conflicting HbA1c results for same patient on same date"
+  },
+  {
+    "dataset": [
+      [
+        "Grace Davis",
+        "1994-01-11",
+        "Cardiology"
+      ],
+      [
+        "Irene Davis",
+        "1960-10-26",
+        "Oncology"
+      ]
+    ],
+    "question": "The AI merged these as duplicates (same last name). What's wrong?",
+    "options": [
+      "Last name format is different",
+      "The specialty field is inconsistent",
+      "Different first names AND DOBs — these are two distinct patients"
+    ],
+    "answer": "Different first names AND DOBs — these are two distinct patients"
+  },
+  {
+    "dataset": [
+      [
+        "Memorial Hospital",
+        "52 Beds",
+        "ICU: Yes"
+      ],
+      [
+        "Memorial Hospital",
+        "552 Beds",
+        "ICU: Yes"
+      ]
+    ],
+    "question": "The AI merged these as the same hospital. What should it have flagged?",
+    "options": [
+      "Critical bed count difference (52 vs 552) suggests different facilities",
+      "Nothing wrong — name variations are expected",
+      "ICU field should not be included"
+    ],
+    "answer": "Critical bed count difference (52 vs 552) suggests different facilities"
+  },
+  {
+    "dataset": [
+      [
+        "NPI: 1234566119",
+        "Dr. Irene Moore",
+        "Cardiology",
+        "State: CA"
+      ],
+      [
+        "NPI: 1234566119",
+        "Dr. Irene Moore",
+        "Cardiology",
+        "State: TX"
+      ]
+    ],
+    "question": "Same NPI in two states. What should the AI flag?",
+    "options": [
+      "The specialty should be split",
+      "Flag for human review — NPI is nationally unique and this is a potential data error",
+      "This is valid — doctors can practice in multiple states"
+    ],
+    "answer": "Flag for human review — NPI is nationally unique and this is a potential data error"
+  },
+  {
+    "dataset": [
+      [
+        "Insulin",
+        "500mg",
+        "IV",
+        "Daily"
+      ],
+      [
+        "Insulin",
+        "2000mg",
+        "IV",
+        "Daily"
+      ]
+    ],
+    "question": "The AI kept one record. Which approach is correct?",
+    "options": [
+      "Keep both — different doses (500mg vs 2000mg) represent distinct prescriptions",
+      "Merge them — same drug and route is sufficient for deduplication",
+      "Delete both — conflicting data should always be removed"
+    ],
+    "answer": "Keep both — different doses (500mg vs 2000mg) represent distinct prescriptions"
+  },
+  {
+    "dataset": [
+      [
+        "Leo Johnson",
+        "555-760-6288",
+        "user72@example.com"
+      ],
+      [
+        "Leo Johnson",
+        "555-760-6288",
+        "user582@hospital.org"
+      ],
+      [
+        "Leo Johnson",
+        "555-877-8953",
+        "user72@example.com"
+      ]
+    ],
+    "question": "What data inconsistency did the AI fail to flag?",
+    "options": [
+      "Email format is invalid",
+      "Multiple conflicting phone+email combinations make the correct contact ambiguous",
+      "Phone number format is inconsistent"
+    ],
+    "answer": "Multiple conflicting phone+email combinations make the correct contact ambiguous"
+  },
+  {
+    "dataset": [
+      [
+        "MedPlus",
+        "Houston",
+        "IN-NETWORK"
+      ],
+      [
+        "MedPlus Inc.",
+        "Houston",
+        "OUT-OF-NETWORK"
+      ]
+    ],
+    "question": "The AI couldn't decide if these are duplicates. What's the critical conflict?",
+    "options": [
+      "Name format differs AND operational status conflicts (IN-NETWORK vs OUT-OF-NETWORK)",
+      "Pharmacy types are not comparable",
+      "City name should be a state code"
+    ],
+    "answer": "Name format differs AND operational status conflicts (IN-NETWORK vs OUT-OF-NETWORK)"
+  },
+  {
+    "dataset": [
+      [
+        "AIIMS Clinic",
+        "Mumbai",
+        "DL"
+      ]
+    ],
+    "question": "What did the AI get wrong in this hospital record?",
+    "options": [
+      "Wrong state code for Mumbai (should be MH)",
+      "Duplicate hospital entry",
+      "Nothing is wrong"
+    ],
+    "answer": "Wrong state code for Mumbai (should be MH)"
+  },
+  {
+    "dataset": [
+      [
+        "Dr. Irene Smith",
+        "Pediatrics",
+        "Seattle"
+      ],
+      [
+        "Dr. Irene Smith",
+        "Neurology",
+        "Seattle"
+      ]
+    ],
+    "question": "What error did the AI make in this doctor record?",
+    "options": [
+      "City field is duplicated",
+      "Wrong doctor name format",
+      "Conflicting specialties for same doctor (Pediatrics vs Neurology)"
+    ],
+    "answer": "Conflicting specialties for same doctor (Pediatrics vs Neurology)"
+  },
+  {
+    "dataset": [
+      [
+        "Claim #8945",
+        "Carol Williams",
+        "$2530",
+        "PENDING"
+      ],
+      [
+        "Claim #8945",
+        "Carol Williams",
+        "$2530",
+        "CLOSED"
+      ]
+    ],
+    "question": "The AI kept both records. What's critically wrong?",
+    "options": [
+      "Claim amount is incorrect",
+      "Name format is inconsistent",
+      "Same claim cannot be both PENDING and CLOSED"
+    ],
+    "answer": "Same claim cannot be both PENDING and CLOSED"
+  },
+  {
+    "dataset": [
+      [
+        "Patient: 6937",
+        "Lab: eGFR",
+        "Date: 2024-07-13",
+        "85 (NORMAL)"
+      ],
+      [
+        "Patient: 6937",
+        "Lab: eGFR",
+        "Date: 2024-07-13",
+        "35 (STAGE 3 CKD)"
+      ]
+    ],
+    "question": "What is the most dangerous AI error in this lab record?",
+    "options": [
+      "Lab test name is abbreviated",
+      "Date format is inconsistent",
+      "Conflicting eGFR results for same patient on same date"
+    ],
+    "answer": "Conflicting eGFR results for same patient on same date"
+  },
+  {
+    "dataset": [
+      [
+        "Bob Davis",
+        "1977-06-21",
+        "Cardiology"
+      ],
+      [
+        "Frank Davis",
+        "1975-10-26",
+        "Oncology"
+      ]
+    ],
+    "question": "The AI merged these as duplicates (same last name). What's wrong?",
+    "options": [
+      "Different first names AND DOBs — these are two distinct patients",
+      "The specialty field is inconsistent",
+      "Last name format is different"
+    ],
+    "answer": "Different first names AND DOBs — these are two distinct patients"
+  },
+  {
+    "dataset": [
+      [
+        "Memorial Hospital",
+        "52 Beds",
+        "ICU: Yes"
+      ],
+      [
+        "memorial",
+        "252 Beds",
+        "ICU: Yes"
+      ]
+    ],
+    "question": "The AI merged these as the same hospital. What should it have flagged?",
+    "options": [
+      "ICU field should not be included",
+      "Nothing wrong — name variations are expected",
+      "Critical bed count difference (52 vs 252) suggests different facilities"
+    ],
+    "answer": "Critical bed count difference (52 vs 252) suggests different facilities"
+  },
+  {
+    "dataset": [
+      [
+        "NPI: 1234535356",
+        "Dr. Irene Wilson",
+        "Neurology",
+        "State: CA"
+      ],
+      [
+        "NPI: 1234535356",
+        "Dr. Irene Wilson",
+        "Neurology",
+        "State: TX"
+      ]
+    ],
+    "question": "Same NPI in two states. What should the AI flag?",
+    "options": [
+      "Flag for human review — NPI is nationally unique and this is a potential data error",
+      "This is valid — doctors can practice in multiple states",
+      "The specialty should be split"
+    ],
+    "answer": "Flag for human review — NPI is nationally unique and this is a potential data error"
+  },
+  {
+    "dataset": [
+      [
+        "Warfarin",
+        "250mg",
+        "Sublingual",
+        "Daily"
+      ],
+      [
+        "Warfarin",
+        "2000mg",
+        "Sublingual",
+        "Daily"
+      ]
+    ],
+    "question": "The AI kept one record. Which approach is correct?",
+    "options": [
+      "Delete both — conflicting data should always be removed",
+      "Merge them — same drug and route is sufficient for deduplication",
+      "Keep both — different doses (250mg vs 2000mg) represent distinct prescriptions"
+    ],
+    "answer": "Keep both — different doses (250mg vs 2000mg) represent distinct prescriptions"
+  },
+  {
+    "dataset": [
+      [
+        "Leo Jones",
+        "555-399-5927",
+        "user17@example.com"
+      ],
+      [
+        "Leo Jones",
+        "555-399-5927",
+        "user748@hospital.org"
+      ],
+      [
+        "Leo Jones",
+        "555-418-7232",
+        "user17@example.com"
+      ]
+    ],
+    "question": "What data inconsistency did the AI fail to flag?",
+    "options": [
+      "Phone number format is inconsistent",
+      "Email format is invalid",
+      "Multiple conflicting phone+email combinations make the correct contact ambiguous"
+    ],
+    "answer": "Multiple conflicting phone+email combinations make the correct contact ambiguous"
+  },
+  {
+    "dataset": [
+      [
+        "Apollo Pharmacy",
+        "Mumbai",
+        "OPEN"
+      ],
+      [
+        "Apollo Pharmacy Inc.",
+        "Mumbai",
+        "SUSPENDED"
+      ]
+    ],
+    "question": "The AI couldn't decide if these are duplicates. What's the critical conflict?",
+    "options": [
+      "Name format differs AND operational status conflicts (OPEN vs SUSPENDED)",
+      "City name should be a state code",
+      "Pharmacy types are not comparable"
+    ],
+    "answer": "Name format differs AND operational status conflicts (OPEN vs SUSPENDED)"
+  },
+  {
+    "dataset": [
+      [
+        "Max Medical Center",
+        "Chicago",
+        "TX"
+      ]
+    ],
+    "question": "What did the AI get wrong in this hospital record?",
+    "options": [
+      "Nothing is wrong",
+      "Duplicate hospital entry",
+      "Wrong state code for Chicago (should be IL)"
+    ],
+    "answer": "Wrong state code for Chicago (should be IL)"
+  },
+  {
+    "dataset": [
+      [
+        "Dr. Frank Moore",
+        "Cardiology",
+        "Boston"
+      ],
+      [
+        "Dr. Frank Moore",
+        "Dermatology",
+        "Boston"
+      ]
+    ],
+    "question": "What error did the AI make in this doctor record?",
+    "options": [
+      "Wrong doctor name format",
+      "Conflicting specialties for same doctor (Cardiology vs Dermatology)",
+      "City field is duplicated"
+    ],
+    "answer": "Conflicting specialties for same doctor (Cardiology vs Dermatology)"
+  },
+  {
+    "dataset": [
+      [
+        "Claim #9081",
+        "James Moore",
+        "$3911",
+        "APPROVED"
+      ],
+      [
+        "Claim #9081",
+        "James Moore",
+        "$3911",
+        "DENIED"
+      ]
+    ],
+    "question": "The AI kept both records. What's critically wrong?",
+    "options": [
+      "Same claim cannot be both APPROVED and DENIED",
+      "Claim amount is incorrect",
+      "Name format is inconsistent"
+    ],
+    "answer": "Same claim cannot be both APPROVED and DENIED"
+  },
+  {
+    "dataset": [
+      [
+        "Patient: 2228",
+        "Lab: Troponin",
+        "Date: 2024-09-27",
+        "0.01 (NORMAL) (NEGATIVE)"
+      ],
+      [
+        "Patient: 2228",
+        "Lab: Troponin",
+        "Date: 2024-09-27",
+        "2.5 (ELEVATED) (POSITIVE)"
+      ]
+    ],
+    "question": "What is the most dangerous AI error in this lab record?",
+    "options": [
+      "Lab test name is abbreviated",
+      "Date format is inconsistent",
+      "Conflicting Troponin results for same patient on same date"
+    ],
+    "answer": "Conflicting Troponin results for same patient on same date"
+  },
+  {
+    "dataset": [
+      [
+        "Irene Wilson",
+        "1975-08-23",
+        "Cardiology"
+      ],
+      [
+        "Alice Wilson",
+        "1964-11-26",
+        "Oncology"
+      ]
+    ],
+    "question": "The AI merged these as duplicates (same last name). What's wrong?",
+    "options": [
+      "Last name format is different",
+      "The specialty field is inconsistent",
+      "Different first names AND DOBs — these are two distinct patients"
+    ],
+    "answer": "Different first names AND DOBs — these are two distinct patients"
+  },
+  {
+    "dataset": [
+      [
+        "General Hospital",
+        "178 Beds",
+        "ICU: Yes"
+      ],
+      [
+        "General Hospital",
+        "678 Beds",
+        "ICU: Yes"
+      ]
+    ],
+    "question": "The AI merged these as the same hospital. What should it have flagged?",
+    "options": [
+      "Nothing wrong — name variations are expected",
+      "Critical bed count difference (178 vs 678) suggests different facilities",
+      "ICU field should not be included"
+    ],
+    "answer": "Critical bed count difference (178 vs 678) suggests different facilities"
+  },
+  {
+    "dataset": [
+      [
+        "NPI: 1234593181",
+        "Dr. Eva Moore",
+        "Neurology",
+        "State: CA"
+      ],
+      [
+        "NPI: 1234593181",
+        "Dr. Eva Moore",
+        "Neurology",
+        "State: TX"
+      ]
+    ],
+    "question": "Same NPI in two states. What should the AI flag?",
+    "options": [
+      "This is valid — doctors can practice in multiple states",
+      "Flag for human review — NPI is nationally unique and this is a potential data error",
+      "The specialty should be split"
+    ],
+    "answer": "Flag for human review — NPI is nationally unique and this is a potential data error"
+  },
+  {
+    "dataset": [
+      [
+        "Aspirin",
+        "100mg",
+        "Oral",
+        "Daily"
+      ],
+      [
+        "Aspirin",
+        "1000mg",
+        "Oral",
+        "Daily"
+      ]
+    ],
+    "question": "The AI kept one record. Which approach is correct?",
+    "options": [
+      "Delete both — conflicting data should always be removed",
+      "Merge them — same drug and route is sufficient for deduplication",
+      "Keep both — different doses (100mg vs 1000mg) represent distinct prescriptions"
+    ],
+    "answer": "Keep both — different doses (100mg vs 1000mg) represent distinct prescriptions"
+  },
+  {
+    "dataset": [
+      [
+        "James Moore",
+        "555-933-4551",
+        "user45@example.com"
+      ],
+      [
+        "James Moore",
+        "555-933-4551",
+        "user203@hospital.org"
+      ],
+      [
+        "James Moore",
+        "555-373-4395",
+        "user45@example.com"
+      ]
+    ],
+    "question": "What data inconsistency did the AI fail to flag?",
+    "options": [
+      "Multiple conflicting phone+email combinations make the correct contact ambiguous",
+      "Email format is invalid",
+      "Phone number format is inconsistent"
+    ],
+    "answer": "Multiple conflicting phone+email combinations make the correct contact ambiguous"
+  },
+  {
+    "dataset": [
+      [
+        "City Drugs",
+        "Houston",
+        "IN-NETWORK"
+      ],
+      [
+        "City Drugs Inc.",
+        "Houston",
+        "OUT-OF-NETWORK"
+      ]
+    ],
+    "question": "The AI couldn't decide if these are duplicates. What's the critical conflict?",
+    "options": [
+      "Name format differs AND operational status conflicts (IN-NETWORK vs OUT-OF-NETWORK)",
+      "City name should be a state code",
+      "Pharmacy types are not comparable"
+    ],
+    "answer": "Name format differs AND operational status conflicts (IN-NETWORK vs OUT-OF-NETWORK)"
+  },
+  {
+    "dataset": [
+      [
+        "AIIMS Hospital",
+        "Seattle",
+        "OR"
+      ]
+    ],
+    "question": "What did the AI get wrong in this hospital record?",
+    "options": [
+      "Wrong state code for Seattle (should be WA)",
+      "Duplicate hospital entry",
+      "Nothing is wrong"
+    ],
+    "answer": "Wrong state code for Seattle (should be WA)"
+  },
+  {
+    "dataset": [
+      [
+        "Dr. Eva Garcia",
+        "Cardiology",
+        "Atlanta"
+      ],
+      [
+        "Dr. Eva Garcia",
+        "Radiology",
+        "Atlanta"
+      ]
+    ],
+    "question": "What error did the AI make in this doctor record?",
+    "options": [
+      "City field is duplicated",
+      "Wrong doctor name format",
+      "Conflicting specialties for same doctor (Cardiology vs Radiology)"
+    ],
+    "answer": "Conflicting specialties for same doctor (Cardiology vs Radiology)"
+  },
+  {
+    "dataset": [
+      [
+        "Claim #2407",
+        "Eva Moore",
+        "$2108",
+        "PENDING"
+      ],
+      [
+        "Claim #2407",
+        "Eva Moore",
+        "$2108",
+        "CLOSED"
+      ]
+    ],
+    "question": "The AI kept both records. What's critically wrong?",
+    "options": [
+      "Name format is inconsistent",
+      "Same claim cannot be both PENDING and CLOSED",
+      "Claim amount is incorrect"
+    ],
+    "answer": "Same claim cannot be both PENDING and CLOSED"
+  },
+  {
+    "dataset": [
+      [
+        "Patient: 6730",
+        "Lab: Troponin",
+        "Date: 2024-04-21",
+        "0.01 (NORMAL) (NEGATIVE)"
+      ],
+      [
+        "Patient: 6730",
+        "Lab: Troponin",
+        "Date: 2024-04-21",
+        "2.5 (ELEVATED) (POSITIVE)"
+      ]
+    ],
+    "question": "What is the most dangerous AI error in this lab record?",
+    "options": [
+      "Conflicting Troponin results for same patient on same date",
+      "Date format is inconsistent",
+      "Lab test name is abbreviated"
+    ],
+    "answer": "Conflicting Troponin results for same patient on same date"
+  },
+  {
+    "dataset": [
+      [
+        "Frank Jones",
+        "1992-06-10",
+        "Cardiology"
+      ],
+      [
+        "Alice Jones",
+        "1979-11-27",
+        "Oncology"
+      ]
+    ],
+    "question": "The AI merged these as duplicates (same last name). What's wrong?",
+    "options": [
+      "Last name format is different",
+      "The specialty field is inconsistent",
+      "Different first names AND DOBs — these are two distinct patients"
+    ],
+    "answer": "Different first names AND DOBs — these are two distinct patients"
+  },
+  {
+    "dataset": [
+      [
+        "Unity Hospital",
+        "87 Beds",
+        "ICU: Yes"
+      ],
+      [
+        "Unity Hospital",
+        "287 Beds",
+        "ICU: Yes"
+      ]
+    ],
+    "question": "The AI merged these as the same hospital. What should it have flagged?",
+    "options": [
+      "Critical bed count difference (87 vs 287) suggests different facilities",
+      "Nothing wrong — name variations are expected",
+      "ICU field should not be included"
+    ],
+    "answer": "Critical bed count difference (87 vs 287) suggests different facilities"
+  },
+  {
+    "dataset": [
+      [
+        "NPI: 1234568731",
+        "Dr. Leo Davis",
+        "Orthopedics",
+        "State: CA"
+      ],
+      [
+        "NPI: 1234568731",
+        "Dr. Leo Davis",
+        "Orthopedics",
+        "State: TX"
+      ]
+    ],
+    "question": "Same NPI in two states. What should the AI flag?",
+    "options": [
+      "Flag for human review — NPI is nationally unique and this is a potential data error",
+      "This is valid — doctors can practice in multiple states",
+      "The specialty should be split"
+    ],
+    "answer": "Flag for human review — NPI is nationally unique and this is a potential data error"
+  },
+  {
+    "dataset": [
+      [
+        "Atorvastatin",
+        "500mg",
+        "IV",
+        "Daily"
+      ],
+      [
+        "Atorvastatin",
+        "2000mg",
+        "IV",
+        "Daily"
+      ]
+    ],
+    "question": "The AI kept one record. Which approach is correct?",
+    "options": [
+      "Delete both — conflicting data should always be removed",
+      "Merge them — same drug and route is sufficient for deduplication",
+      "Keep both — different doses (500mg vs 2000mg) represent distinct prescriptions"
+    ],
+    "answer": "Keep both — different doses (500mg vs 2000mg) represent distinct prescriptions"
+  },
+  {
+    "dataset": [
+      [
+        "Henry Moore",
+        "555-960-9257",
+        "user82@example.com"
+      ],
+      [
+        "Henry Moore",
+        "555-960-9257",
+        "user278@hospital.org"
+      ],
+      [
+        "Henry Moore",
+        "555-389-6474",
+        "user82@example.com"
+      ]
+    ],
+    "question": "What data inconsistency did the AI fail to flag?",
+    "options": [
+      "Multiple conflicting phone+email combinations make the correct contact ambiguous",
+      "Email format is invalid",
+      "Phone number format is inconsistent"
+    ],
+    "answer": "Multiple conflicting phone+email combinations make the correct contact ambiguous"
+  },
+  {
+    "dataset": [
+      [
+        "Apollo Pharmacy",
+        "Boston",
+        "ACTIVE"
+      ],
+      [
+        "Apollo Pharmacy Inc.",
+        "Boston",
+        "CLOSED"
+      ]
+    ],
+    "question": "The AI couldn't decide if these are duplicates. What's the critical conflict?",
+    "options": [
+      "City name should be a state code",
+      "Pharmacy types are not comparable",
+      "Name format differs AND operational status conflicts (ACTIVE vs CLOSED)"
+    ],
+    "answer": "Name format differs AND operational status conflicts (ACTIVE vs CLOSED)"
+  },
+  {
+    "dataset": [
+      [
+        "AIIMS Clinic",
+        "Chicago",
+        "TX"
+      ]
+    ],
+    "question": "What did the AI get wrong in this hospital record?",
+    "options": [
+      "Nothing is wrong",
+      "Duplicate hospital entry",
+      "Wrong state code for Chicago (should be IL)"
+    ],
+    "answer": "Wrong state code for Chicago (should be IL)"
+  },
+  {
+    "dataset": [
+      [
+        "Dr. David Jones",
+        "Neurology",
+        "Seattle"
+      ],
+      [
+        "Dr. David Jones",
+        "Pediatrics",
+        "Seattle"
+      ]
+    ],
+    "question": "What error did the AI make in this doctor record?",
+    "options": [
+      "City field is duplicated",
+      "Wrong doctor name format",
+      "Conflicting specialties for same doctor (Neurology vs Pediatrics)"
+    ],
+    "answer": "Conflicting specialties for same doctor (Neurology vs Pediatrics)"
+  },
+  {
+    "dataset": [
+      [
+        "Claim #3085",
+        "Eva Wilson",
+        "$652",
+        "PENDING"
+      ],
+      [
+        "Claim #3085",
+        "Eva Wilson",
+        "$652",
+        "CLOSED"
+      ]
+    ],
+    "question": "The AI kept both records. What's critically wrong?",
+    "options": [
+      "Same claim cannot be both PENDING and CLOSED",
+      "Name format is inconsistent",
+      "Claim amount is incorrect"
+    ],
+    "answer": "Same claim cannot be both PENDING and CLOSED"
+  },
+  {
+    "dataset": [
+      [
+        "Patient: 7419",
+        "Lab: eGFR",
+        "Date: 2024-06-19",
+        "86 (NORMAL)"
+      ],
+      [
+        "Patient: 7419",
+        "Lab: eGFR",
+        "Date: 2024-06-19",
+        "28 (STAGE 3 CKD)"
+      ]
+    ],
+    "question": "What is the most dangerous AI error in this lab record?",
+    "options": [
+      "Date format is inconsistent",
+      "Lab test name is abbreviated",
+      "Conflicting eGFR results for same patient on same date"
+    ],
+    "answer": "Conflicting eGFR results for same patient on same date"
+  },
+  {
+    "dataset": [
+      [
+        "Leo Davis",
+        "1980-02-19",
+        "Cardiology"
+      ],
+      [
+        "Alice Davis",
+        "1967-12-16",
+        "Oncology"
+      ]
+    ],
+    "question": "The AI merged these as duplicates (same last name). What's wrong?",
+    "options": [
+      "Different first names AND DOBs — these are two distinct patients",
+      "The specialty field is inconsistent",
+      "Last name format is different"
+    ],
+    "answer": "Different first names AND DOBs — these are two distinct patients"
+  },
+  {
+    "dataset": [
+      [
+        "Metro Hospital",
+        "62 Beds",
+        "ICU: Yes"
+      ],
+      [
+        "Metro Hospital",
+        "262 Beds",
+        "ICU: Yes"
+      ]
+    ],
+    "question": "The AI merged these as the same hospital. What should it have flagged?",
+    "options": [
+      "ICU field should not be included",
+      "Nothing wrong — name variations are expected",
+      "Critical bed count difference (62 vs 262) suggests different facilities"
+    ],
+    "answer": "Critical bed count difference (62 vs 262) suggests different facilities"
+  },
+  {
+    "dataset": [
+      [
+        "NPI: 1234561949",
+        "Dr. Irene Wilson",
+        "Neurology",
+        "State: CA"
+      ],
+      [
+        "NPI: 1234561949",
+        "Dr. Irene Wilson",
+        "Neurology",
+        "State: TX"
+      ]
+    ],
+    "question": "Same NPI in two states. What should the AI flag?",
+    "options": [
+      "This is valid — doctors can practice in multiple states",
+      "Flag for human review — NPI is nationally unique and this is a potential data error",
+      "The specialty should be split"
+    ],
+    "answer": "Flag for human review — NPI is nationally unique and this is a potential data error"
+  },
+  {
+    "dataset": [
+      [
+        "Metformin",
+        "250mg",
+        "Oral",
+        "Daily"
+      ],
+      [
+        "Metformin",
+        "2000mg",
+        "Oral",
+        "Daily"
+      ]
+    ],
+    "question": "The AI kept one record. Which approach is correct?",
+    "options": [
+      "Delete both — conflicting data should always be removed",
+      "Merge them — same drug and route is sufficient for deduplication",
+      "Keep both — different doses (250mg vs 2000mg) represent distinct prescriptions"
+    ],
+    "answer": "Keep both — different doses (250mg vs 2000mg) represent distinct prescriptions"
+  },
+  {
+    "dataset": [
+      [
+        "James Moore",
+        "555-549-3901",
+        "user77@example.com"
+      ],
+      [
+        "James Moore",
+        "555-549-3901",
+        "user396@hospital.org"
+      ],
+      [
+        "James Moore",
+        "555-422-4091",
+        "user77@example.com"
+      ]
+    ],
+    "question": "What data inconsistency did the AI fail to flag?",
+    "options": [
+      "Multiple conflicting phone+email combinations make the correct contact ambiguous",
+      "Email format is invalid",
+      "Phone number format is inconsistent"
+    ],
+    "answer": "Multiple conflicting phone+email combinations make the correct contact ambiguous"
+  },
+  {
+    "dataset": [
+      [
+        "Wellness Plus",
+        "Phoenix",
+        "IN-NETWORK"
+      ],
+      [
+        "Wellness Plus Inc.",
+        "Phoenix",
+        "OUT-OF-NETWORK"
+      ]
+    ],
+    "question": "The AI couldn't decide if these are duplicates. What's the critical conflict?",
+    "options": [
+      "Name format differs AND operational status conflicts (IN-NETWORK vs OUT-OF-NETWORK)",
+      "City name should be a state code",
+      "Pharmacy types are not comparable"
+    ],
+    "answer": "Name format differs AND operational status conflicts (IN-NETWORK vs OUT-OF-NETWORK)"
+  },
+  {
+    "dataset": [
+      [
+        "Medanta Hospital",
+        "Seattle",
+        "OR"
+      ]
+    ],
+    "question": "What did the AI get wrong in this hospital record?",
+    "options": [
+      "Nothing is wrong",
+      "Duplicate hospital entry",
+      "Wrong state code for Seattle (should be WA)"
+    ],
+    "answer": "Wrong state code for Seattle (should be WA)"
+  },
+  {
+    "dataset": [
+      [
+        "Dr. Eva Miller",
+        "Neurology",
+        "Phoenix"
+      ],
+      [
+        "Dr. Eva Miller",
+        "Orthopedics",
+        "Phoenix"
+      ]
+    ],
+    "question": "What error did the AI make in this doctor record?",
+    "options": [
+      "City field is duplicated",
+      "Wrong doctor name format",
+      "Conflicting specialties for same doctor (Neurology vs Orthopedics)"
+    ],
+    "answer": "Conflicting specialties for same doctor (Neurology vs Orthopedics)"
+  },
+  {
+    "dataset": [
+      [
+        "Claim #3696",
+        "Irene Jones",
+        "$4027",
+        "ACTIVE"
+      ],
+      [
+        "Claim #3696",
+        "Irene Jones",
+        "$4027",
+        "CANCELLED"
+      ]
+    ],
+    "question": "The AI kept both records. What's critically wrong?",
+    "options": [
+      "Claim amount is incorrect",
+      "Same claim cannot be both ACTIVE and CANCELLED",
+      "Name format is inconsistent"
+    ],
+    "answer": "Same claim cannot be both ACTIVE and CANCELLED"
+  },
+  {
+    "dataset": [
+      [
+        "Patient: 5826",
+        "Lab: WBC",
+        "Date: 2024-02-23",
+        "4.4 (NORMAL)"
+      ],
+      [
+        "Patient: 5826",
+        "Lab: WBC",
+        "Date: 2024-02-23",
+        "15.7 (HIGH)"
+      ]
+    ],
+    "question": "What is the most dangerous AI error in this lab record?",
+    "options": [
+      "Date format is inconsistent",
+      "Lab test name is abbreviated",
+      "Conflicting WBC results for same patient on same date"
+    ],
+    "answer": "Conflicting WBC results for same patient on same date"
+  },
+  {
+    "dataset": [
+      [
+        "David Wilson",
+        "1985-03-16",
+        "Cardiology"
+      ],
+      [
+        "Irene Wilson",
+        "1979-10-20",
+        "Oncology"
+      ]
+    ],
+    "question": "The AI merged these as duplicates (same last name). What's wrong?",
+    "options": [
+      "Different first names AND DOBs — these are two distinct patients",
+      "The specialty field is inconsistent",
+      "Last name format is different"
+    ],
+    "answer": "Different first names AND DOBs — these are two distinct patients"
+  },
+  {
+    "dataset": [
+      [
+        "Unity Hospital",
+        "176 Beds",
+        "ICU: Yes"
+      ],
+      [
+        "unity",
+        "376 Beds",
+        "ICU: Yes"
+      ]
+    ],
+    "question": "The AI merged these as the same hospital. What should it have flagged?",
+    "options": [
+      "ICU field should not be included",
+      "Nothing wrong — name variations are expected",
+      "Critical bed count difference (176 vs 376) suggests different facilities"
+    ],
+    "answer": "Critical bed count difference (176 vs 376) suggests different facilities"
+  },
+  {
+    "dataset": [
+      [
+        "NPI: 1234570250",
+        "Dr. David Garcia",
+        "Neurology",
+        "State: CA"
+      ],
+      [
+        "NPI: 1234570250",
+        "Dr. David Garcia",
+        "Neurology",
+        "State: TX"
+      ]
+    ],
+    "question": "Same NPI in two states. What should the AI flag?",
+    "options": [
+      "This is valid — doctors can practice in multiple states",
+      "Flag for human review — NPI is nationally unique and this is a potential data error",
+      "The specialty should be split"
+    ],
+    "answer": "Flag for human review — NPI is nationally unique and this is a potential data error"
+  },
+  {
+    "dataset": [
+      [
+        "Atorvastatin",
+        "500mg",
+        "Sublingual",
+        "Daily"
+      ],
+      [
+        "Atorvastatin",
+        "1000mg",
+        "Sublingual",
+        "Daily"
+      ]
+    ],
+    "question": "The AI kept one record. Which approach is correct?",
+    "options": [
+      "Keep both — different doses (500mg vs 1000mg) represent distinct prescriptions",
+      "Merge them — same drug and route is sufficient for deduplication",
+      "Delete both — conflicting data should always be removed"
+    ],
+    "answer": "Keep both — different doses (500mg vs 1000mg) represent distinct prescriptions"
+  },
+  {
+    "dataset": [
+      [
+        "Leo Garcia",
+        "555-740-1275",
+        "user12@example.com"
+      ],
+      [
+        "Leo Garcia",
+        "555-740-1275",
+        "user435@hospital.org"
+      ],
+      [
+        "Leo Garcia",
+        "555-377-8267",
+        "user12@example.com"
+      ]
+    ],
+    "question": "What data inconsistency did the AI fail to flag?",
+    "options": [
+      "Multiple conflicting phone+email combinations make the correct contact ambiguous",
+      "Email format is invalid",
+      "Phone number format is inconsistent"
+    ],
+    "answer": "Multiple conflicting phone+email combinations make the correct contact ambiguous"
+  },
+  {
+    "dataset": [
+      [
+        "Wellness Plus",
+        "Mumbai",
+        "IN-NETWORK"
+      ],
+      [
+        "Wellness Plus Inc.",
+        "Mumbai",
+        "OUT-OF-NETWORK"
+      ]
+    ],
+    "question": "The AI couldn't decide if these are duplicates. What's the critical conflict?",
+    "options": [
+      "Pharmacy types are not comparable",
+      "City name should be a state code",
+      "Name format differs AND operational status conflicts (IN-NETWORK vs OUT-OF-NETWORK)"
+    ],
+    "answer": "Name format differs AND operational status conflicts (IN-NETWORK vs OUT-OF-NETWORK)"
+  },
+  {
+    "dataset": [
+      [
+        "Max Hospital",
+        "Mumbai",
+        "DL"
+      ]
+    ],
+    "question": "What did the AI get wrong in this hospital record?",
+    "options": [
+      "Duplicate hospital entry",
+      "Wrong state code for Mumbai (should be MH)",
+      "Nothing is wrong"
+    ],
+    "answer": "Wrong state code for Mumbai (should be MH)"
+  },
+  {
+    "dataset": [
+      [
+        "Dr. Alice Moore",
+        "Dermatology",
+        "Delhi"
+      ],
+      [
+        "Dr. Alice Moore",
+        "Neurology",
+        "Delhi"
+      ]
+    ],
+    "question": "What error did the AI make in this doctor record?",
+    "options": [
+      "Conflicting specialties for same doctor (Dermatology vs Neurology)",
+      "Wrong doctor name format",
+      "City field is duplicated"
+    ],
+    "answer": "Conflicting specialties for same doctor (Dermatology vs Neurology)"
+  },
+  {
+    "dataset": [
+      [
+        "Claim #6165",
+        "James Davis",
+        "$814",
+        "ACTIVE"
+      ],
+      [
+        "Claim #6165",
+        "James Davis",
+        "$814",
+        "CANCELLED"
+      ]
+    ],
+    "question": "The AI kept both records. What's critically wrong?",
+    "options": [
+      "Claim amount is incorrect",
+      "Name format is inconsistent",
+      "Same claim cannot be both ACTIVE and CANCELLED"
+    ],
+    "answer": "Same claim cannot be both ACTIVE and CANCELLED"
+  },
+  {
+    "dataset": [
+      [
+        "Patient: 3652",
+        "Lab: eGFR",
+        "Date: 2024-07-14",
+        "74 (NORMAL)"
+      ],
+      [
+        "Patient: 3652",
+        "Lab: eGFR",
+        "Date: 2024-07-14",
+        "29 (STAGE 3 CKD)"
+      ]
+    ],
+    "question": "What is the most dangerous AI error in this lab record?",
+    "options": [
+      "Conflicting eGFR results for same patient on same date",
+      "Lab test name is abbreviated",
+      "Date format is inconsistent"
+    ],
+    "answer": "Conflicting eGFR results for same patient on same date"
+  },
+  {
+    "dataset": [
+      [
+        "Eva Smith",
+        "1975-05-27",
+        "Cardiology"
+      ],
+      [
+        "Alice Smith",
+        "1960-12-24",
+        "Oncology"
+      ]
+    ],
+    "question": "The AI merged these as duplicates (same last name). What's wrong?",
+    "options": [
+      "Different first names AND DOBs — these are two distinct patients",
+      "The specialty field is inconsistent",
+      "Last name format is different"
+    ],
+    "answer": "Different first names AND DOBs — these are two distinct patients"
+  },
+  {
+    "dataset": [
+      [
+        "Memorial Hospital",
+        "110 Beds",
+        "ICU: Yes"
+      ],
+      [
+        "Memorial Hospital",
+        "610 Beds",
+        "ICU: Yes"
+      ]
+    ],
+    "question": "The AI merged these as the same hospital. What should it have flagged?",
+    "options": [
+      "Critical bed count difference (110 vs 610) suggests different facilities",
+      "Nothing wrong — name variations are expected",
+      "ICU field should not be included"
+    ],
+    "answer": "Critical bed count difference (110 vs 610) suggests different facilities"
+  },
+  {
+    "dataset": [
+      [
+        "NPI: 1234584918",
+        "Dr. James Jones",
+        "Neurology",
+        "State: CA"
+      ],
+      [
+        "NPI: 1234584918",
+        "Dr. James Jones",
+        "Neurology",
+        "State: TX"
+      ]
+    ],
+    "question": "Same NPI in two states. What should the AI flag?",
+    "options": [
+      "The specialty should be split",
+      "This is valid — doctors can practice in multiple states",
+      "Flag for human review — NPI is nationally unique and this is a potential data error"
+    ],
+    "answer": "Flag for human review — NPI is nationally unique and this is a potential data error"
+  },
+  {
+    "dataset": [
+      [
+        "Metformin",
+        "250mg",
+        "Sublingual",
+        "Daily"
+      ],
+      [
+        "Metformin",
+        "5mg",
+        "Sublingual",
+        "Daily"
+      ]
+    ],
+    "question": "The AI kept one record. Which approach is correct?",
+    "options": [
+      "Keep both — different doses (250mg vs 5mg) represent distinct prescriptions",
+      "Merge them — same drug and route is sufficient for deduplication",
+      "Delete both — conflicting data should always be removed"
+    ],
+    "answer": "Keep both — different doses (250mg vs 5mg) represent distinct prescriptions"
+  },
+  {
+    "dataset": [
+      [
+        "David Wilson",
+        "555-213-1178",
+        "user4@example.com"
+      ],
+      [
+        "David Wilson",
+        "555-213-1178",
+        "user803@hospital.org"
+      ],
+      [
+        "David Wilson",
+        "555-366-6618",
+        "user4@example.com"
+      ]
+    ],
+    "question": "What data inconsistency did the AI fail to flag?",
+    "options": [
+      "Multiple conflicting phone+email combinations make the correct contact ambiguous",
+      "Email format is invalid",
+      "Phone number format is inconsistent"
+    ],
+    "answer": "Multiple conflicting phone+email combinations make the correct contact ambiguous"
+  },
+  {
+    "dataset": [
+      [
+        "MedPlus",
+        "Boston",
+        "ACTIVE"
+      ],
+      [
+        "MedPlus Inc.",
+        "Boston",
+        "CLOSED"
+      ]
+    ],
+    "question": "The AI couldn't decide if these are duplicates. What's the critical conflict?",
+    "options": [
+      "City name should be a state code",
+      "Name format differs AND operational status conflicts (ACTIVE vs CLOSED)",
+      "Pharmacy types are not comparable"
+    ],
+    "answer": "Name format differs AND operational status conflicts (ACTIVE vs CLOSED)"
+  },
+  {
+    "dataset": [
+      [
+        "Medanta Medical Center",
+        "Boston",
+        "NY"
+      ]
+    ],
+    "question": "What did the AI get wrong in this hospital record?",
+    "options": [
+      "Nothing is wrong",
+      "Duplicate hospital entry",
+      "Wrong state code for Boston (should be MA)"
+    ],
+    "answer": "Wrong state code for Boston (should be MA)"
+  },
+  {
+    "dataset": [
+      [
+        "Dr. Grace Smith",
+        "Oncology",
+        "Boston"
+      ],
+      [
+        "Dr. Grace Smith",
+        "Orthopedics",
+        "Boston"
+      ]
+    ],
+    "question": "What error did the AI make in this doctor record?",
+    "options": [
+      "City field is duplicated",
+      "Conflicting specialties for same doctor (Oncology vs Orthopedics)",
+      "Wrong doctor name format"
+    ],
+    "answer": "Conflicting specialties for same doctor (Oncology vs Orthopedics)"
+  },
+  {
+    "dataset": [
+      [
+        "Claim #2142",
+        "David Johnson",
+        "$4274",
+        "APPROVED"
+      ],
+      [
+        "Claim #2142",
+        "David Johnson",
+        "$4274",
+        "DENIED"
+      ]
+    ],
+    "question": "The AI kept both records. What's critically wrong?",
+    "options": [
+      "Same claim cannot be both APPROVED and DENIED",
+      "Name format is inconsistent",
+      "Claim amount is incorrect"
+    ],
+    "answer": "Same claim cannot be both APPROVED and DENIED"
+  },
+  {
+    "dataset": [
+      [
+        "Patient: 9502",
+        "Lab: eGFR",
+        "Date: 2024-04-20",
+        "94 (NORMAL)"
+      ],
+      [
+        "Patient: 9502",
+        "Lab: eGFR",
+        "Date: 2024-04-20",
+        "25 (STAGE 3 CKD)"
+      ]
+    ],
+    "question": "What is the most dangerous AI error in this lab record?",
+    "options": [
+      "Lab test name is abbreviated",
+      "Date format is inconsistent",
+      "Conflicting eGFR results for same patient on same date"
+    ],
+    "answer": "Conflicting eGFR results for same patient on same date"
+  },
+  {
+    "dataset": [
+      [
+        "Irene Wilson",
+        "1991-01-14",
+        "Cardiology"
+      ],
+      [
+        "David Wilson",
+        "1973-11-13",
+        "Oncology"
+      ]
+    ],
+    "question": "The AI merged these as duplicates (same last name). What's wrong?",
+    "options": [
+      "Different first names AND DOBs — these are two distinct patients",
+      "Last name format is different",
+      "The specialty field is inconsistent"
+    ],
+    "answer": "Different first names AND DOBs — these are two distinct patients"
+  },
+  {
+    "dataset": [
+      [
+        "Unity Hospital",
+        "104 Beds",
+        "ICU: Yes"
+      ],
+      [
+        "unity",
+        "404 Beds",
+        "ICU: Yes"
+      ]
+    ],
+    "question": "The AI merged these as the same hospital. What should it have flagged?",
+    "options": [
+      "ICU field should not be included",
+      "Nothing wrong — name variations are expected",
+      "Critical bed count difference (104 vs 404) suggests different facilities"
+    ],
+    "answer": "Critical bed count difference (104 vs 404) suggests different facilities"
+  },
+  {
+    "dataset": [
+      [
+        "NPI: 1234518180",
+        "Dr. Henry Garcia",
+        "Oncology",
+        "State: CA"
+      ],
+      [
+        "NPI: 1234518180",
+        "Dr. Henry Garcia",
+        "Oncology",
+        "State: TX"
+      ]
+    ],
+    "question": "Same NPI in two states. What should the AI flag?",
+    "options": [
+      "This is valid — doctors can practice in multiple states",
+      "The specialty should be split",
+      "Flag for human review — NPI is nationally unique and this is a potential data error"
+    ],
+    "answer": "Flag for human review — NPI is nationally unique and this is a potential data error"
+  },
+  {
+    "dataset": [
+      [
+        "Metformin",
+        "100mg",
+        "Sublingual",
+        "Daily"
+      ],
+      [
+        "Metformin",
+        "1000mg",
+        "Sublingual",
+        "Daily"
+      ]
+    ],
+    "question": "The AI kept one record. Which approach is correct?",
+    "options": [
+      "Keep both — different doses (100mg vs 1000mg) represent distinct prescriptions",
+      "Merge them — same drug and route is sufficient for deduplication",
+      "Delete both — conflicting data should always be removed"
+    ],
+    "answer": "Keep both — different doses (100mg vs 1000mg) represent distinct prescriptions"
+  },
+  {
+    "dataset": [
+      [
+        "Grace Moore",
+        "555-164-2719",
+        "user42@example.com"
+      ],
+      [
+        "Grace Moore",
+        "555-164-2719",
+        "user924@hospital.org"
+      ],
+      [
+        "Grace Moore",
+        "555-658-1998",
+        "user42@example.com"
+      ]
+    ],
+    "question": "What data inconsistency did the AI fail to flag?",
+    "options": [
+      "Email format is invalid",
+      "Phone number format is inconsistent",
+      "Multiple conflicting phone+email combinations make the correct contact ambiguous"
+    ],
+    "answer": "Multiple conflicting phone+email combinations make the correct contact ambiguous"
+  },
+  {
+    "dataset": [
+      [
+        "MedPlus",
+        "Chicago",
+        "IN-NETWORK"
+      ],
+      [
+        "MedPlus Inc.",
+        "Chicago",
+        "OUT-OF-NETWORK"
+      ]
+    ],
+    "question": "The AI couldn't decide if these are duplicates. What's the critical conflict?",
+    "options": [
+      "Pharmacy types are not comparable",
+      "City name should be a state code",
+      "Name format differs AND operational status conflicts (IN-NETWORK vs OUT-OF-NETWORK)"
+    ],
+    "answer": "Name format differs AND operational status conflicts (IN-NETWORK vs OUT-OF-NETWORK)"
+  },
+  {
+    "dataset": [
+      [
+        "AIIMS Medical Center",
+        "Phoenix",
+        "NV"
+      ]
+    ],
+    "question": "What did the AI get wrong in this hospital record?",
+    "options": [
+      "Nothing is wrong",
+      "Duplicate hospital entry",
+      "Wrong state code for Phoenix (should be AZ)"
+    ],
+    "answer": "Wrong state code for Phoenix (should be AZ)"
+  },
+  {
+    "dataset": [
+      [
+        "Dr. James Williams",
+        "Pediatrics",
+        "Seattle"
+      ],
+      [
+        "Dr. James Williams",
+        "Radiology",
+        "Seattle"
+      ]
+    ],
+    "question": "What error did the AI make in this doctor record?",
+    "options": [
+      "Wrong doctor name format",
+      "Conflicting specialties for same doctor (Pediatrics vs Radiology)",
+      "City field is duplicated"
+    ],
+    "answer": "Conflicting specialties for same doctor (Pediatrics vs Radiology)"
+  },
+  {
+    "dataset": [
+      [
+        "Claim #6277",
+        "Irene Johnson",
+        "$3095",
+        "ACTIVE"
+      ],
+      [
+        "Claim #6277",
+        "Irene Johnson",
+        "$3095",
+        "CANCELLED"
+      ]
+    ],
+    "question": "The AI kept both records. What's critically wrong?",
+    "options": [
+      "Claim amount is incorrect",
+      "Name format is inconsistent",
+      "Same claim cannot be both ACTIVE and CANCELLED"
+    ],
+    "answer": "Same claim cannot be both ACTIVE and CANCELLED"
+  },
+  {
+    "dataset": [
+      [
+        "Patient: 8028",
+        "Lab: WBC",
+        "Date: 2024-09-19",
+        "5.3 (NORMAL)"
+      ],
+      [
+        "Patient: 8028",
+        "Lab: WBC",
+        "Date: 2024-09-19",
+        "13.6 (HIGH)"
+      ]
+    ],
+    "question": "What is the most dangerous AI error in this lab record?",
+    "options": [
+      "Conflicting WBC results for same patient on same date",
+      "Date format is inconsistent",
+      "Lab test name is abbreviated"
+    ],
+    "answer": "Conflicting WBC results for same patient on same date"
+  },
+  {
+    "dataset": [
+      [
+        "Grace Moore",
+        "1991-03-28",
+        "Cardiology"
+      ],
+      [
+        "Henry Moore",
+        "1961-10-16",
+        "Oncology"
+      ]
+    ],
+    "question": "The AI merged these as duplicates (same last name). What's wrong?",
+    "options": [
+      "Last name format is different",
+      "The specialty field is inconsistent",
+      "Different first names AND DOBs — these are two distinct patients"
+    ],
+    "answer": "Different first names AND DOBs — these are two distinct patients"
+  },
+  {
+    "dataset": [
+      [
+        "General Hospital",
+        "65 Beds",
+        "ICU: Yes"
+      ],
+      [
+        "General",
+        "165 Beds",
+        "ICU: Yes"
+      ]
+    ],
+    "question": "The AI merged these as the same hospital. What should it have flagged?",
+    "options": [
+      "Nothing wrong — name variations are expected",
+      "Critical bed count difference (65 vs 165) suggests different facilities",
+      "ICU field should not be included"
+    ],
+    "answer": "Critical bed count difference (65 vs 165) suggests different facilities"
+  },
+  {
+    "dataset": [
+      [
+        "NPI: 1234532246",
+        "Dr. Henry Williams",
+        "Oncology",
+        "State: CA"
+      ],
+      [
+        "NPI: 1234532246",
+        "Dr. Henry Williams",
+        "Oncology",
+        "State: TX"
+      ]
+    ],
+    "question": "Same NPI in two states. What should the AI flag?",
+    "options": [
+      "This is valid — doctors can practice in multiple states",
+      "The specialty should be split",
+      "Flag for human review — NPI is nationally unique and this is a potential data error"
+    ],
+    "answer": "Flag for human review — NPI is nationally unique and this is a potential data error"
+  },
+  {
+    "dataset": [
+      [
+        "Metformin",
+        "100mg",
+        "IV",
+        "Daily"
+      ],
+      [
+        "Metformin",
+        "5mg",
+        "IV",
+        "Daily"
+      ]
+    ],
+    "question": "The AI kept one record. Which approach is correct?",
+    "options": [
+      "Delete both — conflicting data should always be removed",
+      "Merge them — same drug and route is sufficient for deduplication",
+      "Keep both — different doses (100mg vs 5mg) represent distinct prescriptions"
+    ],
+    "answer": "Keep both — different doses (100mg vs 5mg) represent distinct prescriptions"
+  },
+  {
+    "dataset": [
+      [
+        "Eva Davis",
+        "555-390-9000",
+        "user69@example.com"
+      ],
+      [
+        "Eva Davis",
+        "555-390-9000",
+        "user805@hospital.org"
+      ],
+      [
+        "Eva Davis",
+        "555-331-7498",
+        "user69@example.com"
+      ]
+    ],
+    "question": "What data inconsistency did the AI fail to flag?",
+    "options": [
+      "Email format is invalid",
+      "Multiple conflicting phone+email combinations make the correct contact ambiguous",
+      "Phone number format is inconsistent"
+    ],
+    "answer": "Multiple conflicting phone+email combinations make the correct contact ambiguous"
+  },
+  {
+    "dataset": [
+      [
+        "Wellness Plus",
+        "Mumbai",
+        "IN-NETWORK"
+      ],
+      [
+        "Wellness Plus Inc.",
+        "Mumbai",
+        "OUT-OF-NETWORK"
+      ]
+    ],
+    "question": "The AI couldn't decide if these are duplicates. What's the critical conflict?",
+    "options": [
+      "Pharmacy types are not comparable",
+      "City name should be a state code",
+      "Name format differs AND operational status conflicts (IN-NETWORK vs OUT-OF-NETWORK)"
+    ],
+    "answer": "Name format differs AND operational status conflicts (IN-NETWORK vs OUT-OF-NETWORK)"
+  },
+  {
+    "dataset": [
+      [
+        "Fortis Hospital",
+        "Boston",
+        "NY"
+      ]
+    ],
+    "question": "What did the AI get wrong in this hospital record?",
+    "options": [
+      "Duplicate hospital entry",
+      "Nothing is wrong",
+      "Wrong state code for Boston (should be MA)"
+    ],
+    "answer": "Wrong state code for Boston (should be MA)"
+  },
+  {
+    "dataset": [
+      [
+        "Dr. Frank Johnson",
+        "Pediatrics",
+        "Houston"
+      ],
+      [
+        "Dr. Frank Johnson",
+        "Neurology",
+        "Houston"
+      ]
+    ],
+    "question": "What error did the AI make in this doctor record?",
+    "options": [
+      "Conflicting specialties for same doctor (Pediatrics vs Neurology)",
+      "Wrong doctor name format",
+      "City field is duplicated"
+    ],
+    "answer": "Conflicting specialties for same doctor (Pediatrics vs Neurology)"
+  },
+  {
+    "dataset": [
+      [
+        "Claim #9703",
+        "Bob Jones",
+        "$4108",
+        "APPROVED"
+      ],
+      [
+        "Claim #9703",
+        "Bob Jones",
+        "$4108",
+        "DENIED"
+      ]
+    ],
+    "question": "The AI kept both records. What's critically wrong?",
+    "options": [
+      "Same claim cannot be both APPROVED and DENIED",
+      "Name format is inconsistent",
+      "Claim amount is incorrect"
+    ],
+    "answer": "Same claim cannot be both APPROVED and DENIED"
+  },
+  {
+    "dataset": [
+      [
+        "Patient: 6394",
+        "Lab: eGFR",
+        "Date: 2024-09-18",
+        "83 (NORMAL)"
+      ],
+      [
+        "Patient: 6394",
+        "Lab: eGFR",
+        "Date: 2024-09-18",
+        "34 (STAGE 3 CKD)"
+      ]
+    ],
+    "question": "What is the most dangerous AI error in this lab record?",
+    "options": [
+      "Lab test name is abbreviated",
+      "Date format is inconsistent",
+      "Conflicting eGFR results for same patient on same date"
+    ],
+    "answer": "Conflicting eGFR results for same patient on same date"
+  },
+  {
+    "dataset": [
+      [
+        "Irene Garcia",
+        "1981-08-20",
+        "Cardiology"
+      ],
+      [
+        "Carol Garcia",
+        "1978-11-12",
+        "Oncology"
+      ]
+    ],
+    "question": "The AI merged these as duplicates (same last name). What's wrong?",
+    "options": [
+      "The specialty field is inconsistent",
+      "Different first names AND DOBs — these are two distinct patients",
+      "Last name format is different"
+    ],
+    "answer": "Different first names AND DOBs — these are two distinct patients"
+  },
+  {
+    "dataset": [
+      [
+        "Metro Hospital",
+        "78 Beds",
+        "ICU: Yes"
+      ],
+      [
+        "Metro Hospital",
+        "178 Beds",
+        "ICU: Yes"
+      ]
+    ],
+    "question": "The AI merged these as the same hospital. What should it have flagged?",
+    "options": [
+      "ICU field should not be included",
+      "Critical bed count difference (78 vs 178) suggests different facilities",
+      "Nothing wrong — name variations are expected"
+    ],
+    "answer": "Critical bed count difference (78 vs 178) suggests different facilities"
+  },
+  {
+    "dataset": [
+      [
+        "NPI: 1234578376",
+        "Dr. James Wilson",
+        "Orthopedics",
+        "State: CA"
+      ],
+      [
+        "NPI: 1234578376",
+        "Dr. James Wilson",
+        "Orthopedics",
+        "State: TX"
+      ]
+    ],
+    "question": "Same NPI in two states. What should the AI flag?",
+    "options": [
+      "Flag for human review — NPI is nationally unique and this is a potential data error",
+      "This is valid — doctors can practice in multiple states",
+      "The specialty should be split"
+    ],
+    "answer": "Flag for human review — NPI is nationally unique and this is a potential data error"
+  },
+  {
+    "dataset": [
+      [
+        "Lisinopril",
+        "500mg",
+        "Oral",
+        "Daily"
+      ],
+      [
+        "Lisinopril",
+        "1000mg",
+        "Oral",
+        "Daily"
+      ]
+    ],
+    "question": "The AI kept one record. Which approach is correct?",
+    "options": [
+      "Merge them — same drug and route is sufficient for deduplication",
+      "Keep both — different doses (500mg vs 1000mg) represent distinct prescriptions",
+      "Delete both — conflicting data should always be removed"
+    ],
+    "answer": "Keep both — different doses (500mg vs 1000mg) represent distinct prescriptions"
+  },
+  {
+    "dataset": [
+      [
+        "Henry Miller",
+        "555-814-6516",
+        "user75@example.com"
+      ],
+      [
+        "Henry Miller",
+        "555-814-6516",
+        "user995@hospital.org"
+      ],
+      [
+        "Henry Miller",
+        "555-346-6515",
+        "user75@example.com"
+      ]
+    ],
+    "question": "What data inconsistency did the AI fail to flag?",
+    "options": [
+      "Phone number format is inconsistent",
+      "Email format is invalid",
+      "Multiple conflicting phone+email combinations make the correct contact ambiguous"
+    ],
+    "answer": "Multiple conflicting phone+email combinations make the correct contact ambiguous"
+  },
+  {
+    "dataset": [
+      [
+        "Wellness Plus",
+        "Atlanta",
+        "IN-NETWORK"
+      ],
+      [
+        "Wellness Plus Inc.",
+        "Atlanta",
+        "OUT-OF-NETWORK"
+      ]
+    ],
+    "question": "The AI couldn't decide if these are duplicates. What's the critical conflict?",
+    "options": [
+      "City name should be a state code",
+      "Name format differs AND operational status conflicts (IN-NETWORK vs OUT-OF-NETWORK)",
+      "Pharmacy types are not comparable"
+    ],
+    "answer": "Name format differs AND operational status conflicts (IN-NETWORK vs OUT-OF-NETWORK)"
+  },
+  {
+    "dataset": [
+      [
+        "Medanta Hospital",
+        "Chicago",
+        "TX"
+      ]
+    ],
+    "question": "What did the AI get wrong in this hospital record?",
+    "options": [
+      "Wrong state code for Chicago (should be IL)",
+      "Duplicate hospital entry",
+      "Nothing is wrong"
+    ],
+    "answer": "Wrong state code for Chicago (should be IL)"
+  },
+  {
+    "dataset": [
+      [
+        "Dr. Irene Wilson",
+        "Pediatrics",
+        "Phoenix"
+      ],
+      [
+        "Dr. Irene Wilson",
+        "Dermatology",
+        "Phoenix"
+      ]
+    ],
+    "question": "What error did the AI make in this doctor record?",
+    "options": [
+      "Wrong doctor name format",
+      "City field is duplicated",
+      "Conflicting specialties for same doctor (Pediatrics vs Dermatology)"
+    ],
+    "answer": "Conflicting specialties for same doctor (Pediatrics vs Dermatology)"
+  },
+  {
+    "dataset": [
+      [
+        "Claim #2521",
+        "Eva Moore",
+        "$4251",
+        "PENDING"
+      ],
+      [
+        "Claim #2521",
+        "Eva Moore",
+        "$4251",
+        "CLOSED"
+      ]
+    ],
+    "question": "The AI kept both records. What's critically wrong?",
+    "options": [
+      "Claim amount is incorrect",
+      "Name format is inconsistent",
+      "Same claim cannot be both PENDING and CLOSED"
+    ],
+    "answer": "Same claim cannot be both PENDING and CLOSED"
+  },
+  {
+    "dataset": [
+      [
+        "Patient: 3487",
+        "Lab: WBC",
+        "Date: 2024-07-23",
+        "2.8 (NORMAL)"
+      ],
+      [
+        "Patient: 3487",
+        "Lab: WBC",
+        "Date: 2024-07-23",
+        "13.3 (HIGH)"
+      ]
+    ],
+    "question": "What is the most dangerous AI error in this lab record?",
+    "options": [
+      "Conflicting WBC results for same patient on same date",
+      "Date format is inconsistent",
+      "Lab test name is abbreviated"
+    ],
+    "answer": "Conflicting WBC results for same patient on same date"
+  },
+  {
+    "dataset": [
+      [
+        "Bob Miller",
+        "1984-06-15",
+        "Cardiology"
+      ],
+      [
+        "Leo Miller",
+        "1970-11-13",
+        "Oncology"
+      ]
+    ],
+    "question": "The AI merged these as duplicates (same last name). What's wrong?",
+    "options": [
+      "The specialty field is inconsistent",
+      "Different first names AND DOBs — these are two distinct patients",
+      "Last name format is different"
+    ],
+    "answer": "Different first names AND DOBs — these are two distinct patients"
+  },
+  {
+    "dataset": [
+      [
+        "Metro Hospital",
+        "179 Beds",
+        "ICU: Yes"
+      ],
+      [
+        "Metro Hospital",
+        "479 Beds",
+        "ICU: Yes"
+      ]
+    ],
+    "question": "The AI merged these as the same hospital. What should it have flagged?",
+    "options": [
+      "Critical bed count difference (179 vs 479) suggests different facilities",
+      "Nothing wrong — name variations are expected",
+      "ICU field should not be included"
+    ],
+    "answer": "Critical bed count difference (179 vs 479) suggests different facilities"
+  },
+  {
+    "dataset": [
+      [
+        "NPI: 1234549885",
+        "Dr. David Moore",
+        "Neurology",
+        "State: CA"
+      ],
+      [
+        "NPI: 1234549885",
+        "Dr. David Moore",
+        "Neurology",
+        "State: TX"
+      ]
+    ],
+    "question": "Same NPI in two states. What should the AI flag?",
+    "options": [
+      "Flag for human review — NPI is nationally unique and this is a potential data error",
+      "This is valid — doctors can practice in multiple states",
+      "The specialty should be split"
+    ],
+    "answer": "Flag for human review — NPI is nationally unique and this is a potential data error"
+  },
+  {
+    "dataset": [
+      [
+        "Metformin",
+        "500mg",
+        "Oral",
+        "Daily"
+      ],
+      [
+        "Metformin",
+        "2000mg",
+        "Oral",
+        "Daily"
+      ]
+    ],
+    "question": "The AI kept one record. Which approach is correct?",
+    "options": [
+      "Merge them — same drug and route is sufficient for deduplication",
+      "Keep both — different doses (500mg vs 2000mg) represent distinct prescriptions",
+      "Delete both — conflicting data should always be removed"
+    ],
+    "answer": "Keep both — different doses (500mg vs 2000mg) represent distinct prescriptions"
+  },
+  {
+    "dataset": [
+      [
+        "Bob Johnson",
+        "555-664-7255",
+        "user92@example.com"
+      ],
+      [
+        "Bob Johnson",
+        "555-664-7255",
+        "user890@hospital.org"
+      ],
+      [
+        "Bob Johnson",
+        "555-630-1559",
+        "user92@example.com"
+      ]
+    ],
+    "question": "What data inconsistency did the AI fail to flag?",
+    "options": [
+      "Multiple conflicting phone+email combinations make the correct contact ambiguous",
+      "Phone number format is inconsistent",
+      "Email format is invalid"
+    ],
+    "answer": "Multiple conflicting phone+email combinations make the correct contact ambiguous"
+  },
+  {
+    "dataset": [
+      [
+        "Apollo Pharmacy",
+        "Seattle",
+        "OPEN"
+      ],
+      [
+        "Apollo Pharmacy Inc.",
+        "Seattle",
+        "SUSPENDED"
+      ]
+    ],
+    "question": "The AI couldn't decide if these are duplicates. What's the critical conflict?",
+    "options": [
+      "Name format differs AND operational status conflicts (OPEN vs SUSPENDED)",
+      "City name should be a state code",
+      "Pharmacy types are not comparable"
+    ],
+    "answer": "Name format differs AND operational status conflicts (OPEN vs SUSPENDED)"
+  },
+  {
+    "dataset": [
+      [
+        "Fortis Clinic",
+        "Phoenix",
+        "NV"
+      ]
+    ],
+    "question": "What did the AI get wrong in this hospital record?",
+    "options": [
+      "Nothing is wrong",
+      "Duplicate hospital entry",
+      "Wrong state code for Phoenix (should be AZ)"
+    ],
+    "answer": "Wrong state code for Phoenix (should be AZ)"
+  },
+  {
+    "dataset": [
+      [
+        "Dr. Grace Miller",
+        "Cardiology",
+        "Phoenix"
+      ],
+      [
+        "Dr. Grace Miller",
+        "Radiology",
+        "Phoenix"
+      ]
+    ],
+    "question": "What error did the AI make in this doctor record?",
+    "options": [
+      "Conflicting specialties for same doctor (Cardiology vs Radiology)",
+      "Wrong doctor name format",
+      "City field is duplicated"
+    ],
+    "answer": "Conflicting specialties for same doctor (Cardiology vs Radiology)"
+  },
+  {
+    "dataset": [
+      [
+        "Claim #1925",
+        "Bob Wilson",
+        "$3383",
+        "APPROVED"
+      ],
+      [
+        "Claim #1925",
+        "Bob Wilson",
+        "$3383",
+        "DENIED"
+      ]
+    ],
+    "question": "The AI kept both records. What's critically wrong?",
+    "options": [
+      "Same claim cannot be both APPROVED and DENIED",
+      "Name format is inconsistent",
+      "Claim amount is incorrect"
+    ],
+    "answer": "Same claim cannot be both APPROVED and DENIED"
+  },
+  {
+    "dataset": [
+      [
+        "Patient: 6009",
+        "Lab: HbA1c",
+        "Date: 2024-05-20",
+        "5.6% (NORMAL)"
+      ],
+      [
+        "Patient: 6009",
+        "Lab: HbA1c",
+        "Date: 2024-05-20",
+        "8.4% (DIABETIC)"
+      ]
+    ],
+    "question": "What is the most dangerous AI error in this lab record?",
+    "options": [
+      "Conflicting HbA1c results for same patient on same date",
+      "Lab test name is abbreviated",
+      "Date format is inconsistent"
+    ],
+    "answer": "Conflicting HbA1c results for same patient on same date"
+  },
+  {
+    "dataset": [
+      [
+        "Bob Jones",
+        "1973-09-12",
+        "Cardiology"
+      ],
+      [
+        "Henry Jones",
+        "1969-12-13",
+        "Oncology"
+      ]
+    ],
+    "question": "The AI merged these as duplicates (same last name). What's wrong?",
+    "options": [
+      "Last name format is different",
+      "The specialty field is inconsistent",
+      "Different first names AND DOBs — these are two distinct patients"
+    ],
+    "answer": "Different first names AND DOBs — these are two distinct patients"
+  },
+  {
+    "dataset": [
+      [
+        "Memorial Hospital",
+        "74 Beds",
+        "ICU: Yes"
+      ],
+      [
+        "memorial",
+        "174 Beds",
+        "ICU: Yes"
+      ]
+    ],
+    "question": "The AI merged these as the same hospital. What should it have flagged?",
+    "options": [
+      "Critical bed count difference (74 vs 174) suggests different facilities",
+      "Nothing wrong — name variations are expected",
+      "ICU field should not be included"
+    ],
+    "answer": "Critical bed count difference (74 vs 174) suggests different facilities"
+  },
+  {
+    "dataset": [
+      [
+        "NPI: 1234531210",
+        "Dr. Henry Wilson",
+        "Orthopedics",
+        "State: CA"
+      ],
+      [
+        "NPI: 1234531210",
+        "Dr. Henry Wilson",
+        "Orthopedics",
+        "State: TX"
+      ]
+    ],
+    "question": "Same NPI in two states. What should the AI flag?",
+    "options": [
+      "The specialty should be split",
+      "This is valid — doctors can practice in multiple states",
+      "Flag for human review — NPI is nationally unique and this is a potential data error"
+    ],
+    "answer": "Flag for human review — NPI is nationally unique and this is a potential data error"
+  },
+  {
+    "dataset": [
+      [
+        "Lisinopril",
+        "500mg",
+        "Oral",
+        "Daily"
+      ],
+      [
+        "Lisinopril",
+        "2000mg",
+        "Oral",
+        "Daily"
+      ]
+    ],
+    "question": "The AI kept one record. Which approach is correct?",
+    "options": [
+      "Keep both — different doses (500mg vs 2000mg) represent distinct prescriptions",
+      "Delete both — conflicting data should always be removed",
+      "Merge them — same drug and route is sufficient for deduplication"
+    ],
+    "answer": "Keep both — different doses (500mg vs 2000mg) represent distinct prescriptions"
+  },
+  {
+    "dataset": [
+      [
+        "James Moore",
+        "555-582-2675",
+        "user63@example.com"
+      ],
+      [
+        "James Moore",
+        "555-582-2675",
+        "user627@hospital.org"
+      ],
+      [
+        "James Moore",
+        "555-560-1008",
+        "user63@example.com"
+      ]
+    ],
+    "question": "What data inconsistency did the AI fail to flag?",
+    "options": [
+      "Email format is invalid",
+      "Multiple conflicting phone+email combinations make the correct contact ambiguous",
+      "Phone number format is inconsistent"
+    ],
+    "answer": "Multiple conflicting phone+email combinations make the correct contact ambiguous"
+  },
+  {
+    "dataset": [
+      [
+        "City Drugs",
+        "Chicago",
+        "OPEN"
+      ],
+      [
+        "City Drugs Inc.",
+        "Chicago",
+        "SUSPENDED"
+      ]
+    ],
+    "question": "The AI couldn't decide if these are duplicates. What's the critical conflict?",
+    "options": [
+      "City name should be a state code",
+      "Pharmacy types are not comparable",
+      "Name format differs AND operational status conflicts (OPEN vs SUSPENDED)"
+    ],
+    "answer": "Name format differs AND operational status conflicts (OPEN vs SUSPENDED)"
+  },
+  {
+    "dataset": [
+      [
+        "Apollo Medical Center",
+        "Seattle",
+        "OR"
+      ]
+    ],
+    "question": "What did the AI get wrong in this hospital record?",
+    "options": [
+      "Wrong state code for Seattle (should be WA)",
+      "Duplicate hospital entry",
+      "Nothing is wrong"
+    ],
+    "answer": "Wrong state code for Seattle (should be WA)"
+  },
+  {
+    "dataset": [
+      [
+        "Dr. Frank Brown",
+        "Orthopedics",
+        "Atlanta"
+      ],
+      [
+        "Dr. Frank Brown",
+        "Dermatology",
+        "Atlanta"
+      ]
+    ],
+    "question": "What error did the AI make in this doctor record?",
+    "options": [
+      "Conflicting specialties for same doctor (Orthopedics vs Dermatology)",
+      "Wrong doctor name format",
+      "City field is duplicated"
+    ],
+    "answer": "Conflicting specialties for same doctor (Orthopedics vs Dermatology)"
+  },
+  {
+    "dataset": [
+      [
+        "Claim #4562",
+        "David Wilson",
+        "$2739",
+        "PENDING"
+      ],
+      [
+        "Claim #4562",
+        "David Wilson",
+        "$2739",
+        "CLOSED"
+      ]
+    ],
+    "question": "The AI kept both records. What's critically wrong?",
+    "options": [
+      "Name format is inconsistent",
+      "Same claim cannot be both PENDING and CLOSED",
+      "Claim amount is incorrect"
+    ],
+    "answer": "Same claim cannot be both PENDING and CLOSED"
+  },
+  {
+    "dataset": [
+      [
+        "Patient: 7845",
+        "Lab: Troponin",
+        "Date: 2024-02-17",
+        "0.01 (NORMAL) (NEGATIVE)"
+      ],
+      [
+        "Patient: 7845",
+        "Lab: Troponin",
+        "Date: 2024-02-17",
+        "2.5 (ELEVATED) (POSITIVE)"
+      ]
+    ],
+    "question": "What is the most dangerous AI error in this lab record?",
+    "options": [
+      "Conflicting Troponin results for same patient on same date",
+      "Date format is inconsistent",
+      "Lab test name is abbreviated"
+    ],
+    "answer": "Conflicting Troponin results for same patient on same date"
+  },
+  {
+    "dataset": [
+      [
+        "Frank Miller",
+        "1979-07-17",
+        "Cardiology"
+      ],
+      [
+        "Bob Miller",
+        "1961-10-20",
+        "Oncology"
+      ]
+    ],
+    "question": "The AI merged these as duplicates (same last name). What's wrong?",
+    "options": [
+      "Different first names AND DOBs — these are two distinct patients",
+      "The specialty field is inconsistent",
+      "Last name format is different"
+    ],
+    "answer": "Different first names AND DOBs — these are two distinct patients"
+  },
+  {
+    "dataset": [
+      [
+        "Unity Hospital",
+        "165 Beds",
+        "ICU: Yes"
+      ],
+      [
+        "unity",
+        "365 Beds",
+        "ICU: Yes"
+      ]
+    ],
+    "question": "The AI merged these as the same hospital. What should it have flagged?",
+    "options": [
+      "ICU field should not be included",
+      "Nothing wrong — name variations are expected",
+      "Critical bed count difference (165 vs 365) suggests different facilities"
+    ],
+    "answer": "Critical bed count difference (165 vs 365) suggests different facilities"
+  },
+  {
+    "dataset": [
+      [
+        "NPI: 1234594961",
+        "Dr. Frank Wilson",
+        "Neurology",
+        "State: CA"
+      ],
+      [
+        "NPI: 1234594961",
+        "Dr. Frank Wilson",
+        "Neurology",
+        "State: TX"
+      ]
+    ],
+    "question": "Same NPI in two states. What should the AI flag?",
+    "options": [
+      "Flag for human review — NPI is nationally unique and this is a potential data error",
+      "This is valid — doctors can practice in multiple states",
+      "The specialty should be split"
+    ],
+    "answer": "Flag for human review — NPI is nationally unique and this is a potential data error"
+  },
+  {
+    "dataset": [
+      [
+        "Lisinopril",
+        "250mg",
+        "IV",
+        "Daily"
+      ],
+      [
+        "Lisinopril",
+        "5mg",
+        "IV",
+        "Daily"
+      ]
+    ],
+    "question": "The AI kept one record. Which approach is correct?",
+    "options": [
+      "Merge them — same drug and route is sufficient for deduplication",
+      "Delete both — conflicting data should always be removed",
+      "Keep both — different doses (250mg vs 5mg) represent distinct prescriptions"
+    ],
+    "answer": "Keep both — different doses (250mg vs 5mg) represent distinct prescriptions"
+  },
+  {
+    "dataset": [
+      [
+        "James Wilson",
+        "555-751-1111",
+        "user68@example.com"
+      ],
+      [
+        "James Wilson",
+        "555-751-1111",
+        "user249@hospital.org"
+      ],
+      [
+        "James Wilson",
+        "555-684-6669",
+        "user68@example.com"
+      ]
+    ],
+    "question": "What data inconsistency did the AI fail to flag?",
+    "options": [
+      "Phone number format is inconsistent",
+      "Multiple conflicting phone+email combinations make the correct contact ambiguous",
+      "Email format is invalid"
+    ],
+    "answer": "Multiple conflicting phone+email combinations make the correct contact ambiguous"
+  },
+  {
+    "dataset": [
+      [
+        "Sunrise Pharmacy",
+        "Delhi",
+        "IN-NETWORK"
+      ],
+      [
+        "Sunrise Pharmacy Inc.",
+        "Delhi",
+        "OUT-OF-NETWORK"
+      ]
+    ],
+    "question": "The AI couldn't decide if these are duplicates. What's the critical conflict?",
+    "options": [
+      "Pharmacy types are not comparable",
+      "Name format differs AND operational status conflicts (IN-NETWORK vs OUT-OF-NETWORK)",
+      "City name should be a state code"
+    ],
+    "answer": "Name format differs AND operational status conflicts (IN-NETWORK vs OUT-OF-NETWORK)"
+  },
+  {
+    "dataset": [
+      [
+        "Fortis Clinic",
+        "Mumbai",
+        "DL"
+      ]
+    ],
+    "question": "What did the AI get wrong in this hospital record?",
+    "options": [
+      "Wrong state code for Mumbai (should be MH)",
+      "Duplicate hospital entry",
+      "Nothing is wrong"
+    ],
+    "answer": "Wrong state code for Mumbai (should be MH)"
+  },
+  {
+    "dataset": [
+      [
+        "Dr. David Miller",
+        "Cardiology",
+        "Houston"
+      ],
+      [
+        "Dr. David Miller",
+        "Dermatology",
+        "Houston"
+      ]
+    ],
+    "question": "What error did the AI make in this doctor record?",
+    "options": [
+      "Conflicting specialties for same doctor (Cardiology vs Dermatology)",
+      "City field is duplicated",
+      "Wrong doctor name format"
+    ],
+    "answer": "Conflicting specialties for same doctor (Cardiology vs Dermatology)"
+  },
+  {
+    "dataset": [
+      [
+        "Claim #3351",
+        "Karen Williams",
+        "$528",
+        "ACTIVE"
+      ],
+      [
+        "Claim #3351",
+        "Karen Williams",
+        "$528",
+        "CANCELLED"
+      ]
+    ],
+    "question": "The AI kept both records. What's critically wrong?",
+    "options": [
+      "Claim amount is incorrect",
+      "Same claim cannot be both ACTIVE and CANCELLED",
+      "Name format is inconsistent"
+    ],
+    "answer": "Same claim cannot be both ACTIVE and CANCELLED"
+  },
+  {
+    "dataset": [
+      [
+        "Patient: 2072",
+        "Lab: WBC",
+        "Date: 2024-07-12",
+        "6.3 (NORMAL)"
+      ],
+      [
+        "Patient: 2072",
+        "Lab: WBC",
+        "Date: 2024-07-12",
+        "16.0 (HIGH)"
+      ]
+    ],
+    "question": "What is the most dangerous AI error in this lab record?",
+    "options": [
+      "Lab test name is abbreviated",
+      "Date format is inconsistent",
+      "Conflicting WBC results for same patient on same date"
+    ],
+    "answer": "Conflicting WBC results for same patient on same date"
+  },
+  {
+    "dataset": [
+      [
+        "David Garcia",
+        "1972-08-18",
+        "Cardiology"
+      ],
+      [
+        "Grace Garcia",
+        "1966-12-16",
+        "Oncology"
+      ]
+    ],
+    "question": "The AI merged these as duplicates (same last name). What's wrong?",
+    "options": [
+      "The specialty field is inconsistent",
+      "Last name format is different",
+      "Different first names AND DOBs — these are two distinct patients"
+    ],
+    "answer": "Different first names AND DOBs — these are two distinct patients"
+  },
+  {
+    "dataset": [
+      [
+        "Memorial Hospital",
+        "198 Beds",
+        "ICU: Yes"
+      ],
+      [
+        "memorial",
+        "498 Beds",
+        "ICU: Yes"
+      ]
+    ],
+    "question": "The AI merged these as the same hospital. What should it have flagged?",
+    "options": [
+      "Nothing wrong — name variations are expected",
+      "Critical bed count difference (198 vs 498) suggests different facilities",
+      "ICU field should not be included"
+    ],
+    "answer": "Critical bed count difference (198 vs 498) suggests different facilities"
+  },
+  {
+    "dataset": [
+      [
+        "NPI: 1234524476",
+        "Dr. Frank Brown",
+        "Oncology",
+        "State: CA"
+      ],
+      [
+        "NPI: 1234524476",
+        "Dr. Frank Brown",
+        "Oncology",
+        "State: TX"
+      ]
+    ],
+    "question": "Same NPI in two states. What should the AI flag?",
+    "options": [
+      "This is valid — doctors can practice in multiple states",
+      "The specialty should be split",
+      "Flag for human review — NPI is nationally unique and this is a potential data error"
+    ],
+    "answer": "Flag for human review — NPI is nationally unique and this is a potential data error"
+  },
+  {
+    "dataset": [
+      [
+        "Insulin",
+        "250mg",
+        "IV",
+        "Daily"
+      ],
+      [
+        "Insulin",
+        "5mg",
+        "IV",
+        "Daily"
+      ]
+    ],
+    "question": "The AI kept one record. Which approach is correct?",
+    "options": [
+      "Delete both — conflicting data should always be removed",
+      "Merge them — same drug and route is sufficient for deduplication",
+      "Keep both — different doses (250mg vs 5mg) represent distinct prescriptions"
+    ],
+    "answer": "Keep both — different doses (250mg vs 5mg) represent distinct prescriptions"
+  },
+  {
+    "dataset": [
+      [
+        "Alice Moore",
+        "555-837-6957",
+        "user16@example.com"
+      ],
+      [
+        "Alice Moore",
+        "555-837-6957",
+        "user691@hospital.org"
+      ],
+      [
+        "Alice Moore",
+        "555-135-4776",
+        "user16@example.com"
+      ]
+    ],
+    "question": "What data inconsistency did the AI fail to flag?",
+    "options": [
+      "Phone number format is inconsistent",
+      "Email format is invalid",
+      "Multiple conflicting phone+email combinations make the correct contact ambiguous"
+    ],
+    "answer": "Multiple conflicting phone+email combinations make the correct contact ambiguous"
+  },
+  {
+    "dataset": [
+      [
+        "Sunrise Pharmacy",
+        "Chicago",
+        "OPEN"
+      ],
+      [
+        "Sunrise Pharmacy Inc.",
+        "Chicago",
+        "SUSPENDED"
+      ]
+    ],
+    "question": "The AI couldn't decide if these are duplicates. What's the critical conflict?",
+    "options": [
+      "Name format differs AND operational status conflicts (OPEN vs SUSPENDED)",
+      "City name should be a state code",
+      "Pharmacy types are not comparable"
+    ],
+    "answer": "Name format differs AND operational status conflicts (OPEN vs SUSPENDED)"
+  },
+  {
+    "dataset": [
+      [
+        "Medanta Medical Center",
+        "Seattle",
+        "OR"
+      ]
+    ],
+    "question": "What did the AI get wrong in this hospital record?",
+    "options": [
+      "Wrong state code for Seattle (should be WA)",
+      "Duplicate hospital entry",
+      "Nothing is wrong"
+    ],
+    "answer": "Wrong state code for Seattle (should be WA)"
+  },
+  {
+    "dataset": [
+      [
+        "Dr. Carol Jones",
+        "Orthopedics",
+        "Mumbai"
+      ],
+      [
+        "Dr. Carol Jones",
+        "Oncology",
+        "Mumbai"
+      ]
+    ],
+    "question": "What error did the AI make in this doctor record?",
+    "options": [
+      "Conflicting specialties for same doctor (Orthopedics vs Oncology)",
+      "City field is duplicated",
+      "Wrong doctor name format"
+    ],
+    "answer": "Conflicting specialties for same doctor (Orthopedics vs Oncology)"
+  },
+  {
+    "dataset": [
+      [
+        "Claim #9432",
+        "Henry Wilson",
+        "$2620",
+        "ACTIVE"
+      ],
+      [
+        "Claim #9432",
+        "Henry Wilson",
+        "$2620",
+        "CANCELLED"
+      ]
+    ],
+    "question": "The AI kept both records. What's critically wrong?",
+    "options": [
+      "Name format is inconsistent",
+      "Claim amount is incorrect",
+      "Same claim cannot be both ACTIVE and CANCELLED"
+    ],
+    "answer": "Same claim cannot be both ACTIVE and CANCELLED"
+  },
+  {
+    "dataset": [
+      [
+        "Patient: 6841",
+        "Lab: eGFR",
+        "Date: 2024-07-28",
+        "76 (NORMAL)"
+      ],
+      [
+        "Patient: 6841",
+        "Lab: eGFR",
+        "Date: 2024-07-28",
+        "32 (STAGE 3 CKD)"
+      ]
+    ],
+    "question": "What is the most dangerous AI error in this lab record?",
+    "options": [
+      "Lab test name is abbreviated",
+      "Date format is inconsistent",
+      "Conflicting eGFR results for same patient on same date"
+    ],
+    "answer": "Conflicting eGFR results for same patient on same date"
+  },
+  {
+    "dataset": [
+      [
+        "Bob Wilson",
+        "1994-07-22",
+        "Cardiology"
+      ],
+      [
+        "Leo Wilson",
+        "1965-12-16",
+        "Oncology"
+      ]
+    ],
+    "question": "The AI merged these as duplicates (same last name). What's wrong?",
+    "options": [
+      "Different first names AND DOBs — these are two distinct patients",
+      "The specialty field is inconsistent",
+      "Last name format is different"
+    ],
+    "answer": "Different first names AND DOBs — these are two distinct patients"
+  },
+  {
+    "dataset": [
+      [
+        "Unity Hospital",
+        "55 Beds",
+        "ICU: Yes"
+      ],
+      [
+        "Unity",
+        "555 Beds",
+        "ICU: Yes"
+      ]
+    ],
+    "question": "The AI merged these as the same hospital. What should it have flagged?",
+    "options": [
+      "Critical bed count difference (55 vs 555) suggests different facilities",
+      "Nothing wrong — name variations are expected",
+      "ICU field should not be included"
+    ],
+    "answer": "Critical bed count difference (55 vs 555) suggests different facilities"
+  },
+  {
+    "dataset": [
+      [
+        "NPI: 1234564687",
+        "Dr. David Johnson",
+        "Neurology",
+        "State: CA"
+      ],
+      [
+        "NPI: 1234564687",
+        "Dr. David Johnson",
+        "Neurology",
+        "State: TX"
+      ]
+    ],
+    "question": "Same NPI in two states. What should the AI flag?",
+    "options": [
+      "The specialty should be split",
+      "This is valid — doctors can practice in multiple states",
+      "Flag for human review — NPI is nationally unique and this is a potential data error"
+    ],
+    "answer": "Flag for human review — NPI is nationally unique and this is a potential data error"
+  },
+  {
+    "dataset": [
+      [
+        "Aspirin",
+        "100mg",
+        "Sublingual",
+        "Daily"
+      ],
+      [
+        "Aspirin",
+        "5mg",
+        "Sublingual",
+        "Daily"
+      ]
+    ],
+    "question": "The AI kept one record. Which approach is correct?",
+    "options": [
+      "Merge them — same drug and route is sufficient for deduplication",
+      "Keep both — different doses (100mg vs 5mg) represent distinct prescriptions",
+      "Delete both — conflicting data should always be removed"
+    ],
+    "answer": "Keep both — different doses (100mg vs 5mg) represent distinct prescriptions"
+  },
+  {
+    "dataset": [
+      [
+        "Irene Johnson",
+        "555-479-6002",
+        "user2@example.com"
+      ],
+      [
+        "Irene Johnson",
+        "555-479-6002",
+        "user712@hospital.org"
+      ],
+      [
+        "Irene Johnson",
+        "555-699-4998",
+        "user2@example.com"
+      ]
+    ],
+    "question": "What data inconsistency did the AI fail to flag?",
+    "options": [
+      "Phone number format is inconsistent",
+      "Email format is invalid",
+      "Multiple conflicting phone+email combinations make the correct contact ambiguous"
+    ],
+    "answer": "Multiple conflicting phone+email combinations make the correct contact ambiguous"
+  },
+  {
+    "dataset": [
+      [
+        "Wellness Plus",
+        "Mumbai",
+        "ACTIVE"
+      ],
+      [
+        "Wellness Plus Inc.",
+        "Mumbai",
+        "CLOSED"
+      ]
+    ],
+    "question": "The AI couldn't decide if these are duplicates. What's the critical conflict?",
+    "options": [
+      "City name should be a state code",
+      "Name format differs AND operational status conflicts (ACTIVE vs CLOSED)",
+      "Pharmacy types are not comparable"
+    ],
+    "answer": "Name format differs AND operational status conflicts (ACTIVE vs CLOSED)"
+  },
+  {
+    "dataset": [
+      [
+        "Fortis Hospital",
+        "Phoenix",
+        "NV"
+      ]
+    ],
+    "question": "What did the AI get wrong in this hospital record?",
+    "options": [
+      "Nothing is wrong",
+      "Wrong state code for Phoenix (should be AZ)",
+      "Duplicate hospital entry"
+    ],
+    "answer": "Wrong state code for Phoenix (should be AZ)"
+  },
+  {
+    "dataset": [
+      [
+        "Dr. Bob Moore",
+        "Orthopedics",
+        "Chicago"
+      ],
+      [
+        "Dr. Bob Moore",
+        "Pediatrics",
+        "Chicago"
+      ]
+    ],
+    "question": "What error did the AI make in this doctor record?",
+    "options": [
+      "City field is duplicated",
+      "Wrong doctor name format",
+      "Conflicting specialties for same doctor (Orthopedics vs Pediatrics)"
+    ],
+    "answer": "Conflicting specialties for same doctor (Orthopedics vs Pediatrics)"
+  },
+  {
+    "dataset": [
+      [
+        "Claim #9537",
+        "Karen Garcia",
+        "$969",
+        "PENDING"
+      ],
+      [
+        "Claim #9537",
+        "Karen Garcia",
+        "$969",
+        "CLOSED"
+      ]
+    ],
+    "question": "The AI kept both records. What's critically wrong?",
+    "options": [
+      "Same claim cannot be both PENDING and CLOSED",
+      "Name format is inconsistent",
+      "Claim amount is incorrect"
+    ],
+    "answer": "Same claim cannot be both PENDING and CLOSED"
+  },
+  {
+    "dataset": [
+      [
+        "Patient: 3640",
+        "Lab: WBC",
+        "Date: 2024-09-22",
+        "6.9 (NORMAL)"
+      ],
+      [
+        "Patient: 3640",
+        "Lab: WBC",
+        "Date: 2024-09-22",
+        "15.7 (HIGH)"
+      ]
+    ],
+    "question": "What is the most dangerous AI error in this lab record?",
+    "options": [
+      "Conflicting WBC results for same patient on same date",
+      "Date format is inconsistent",
+      "Lab test name is abbreviated"
+    ],
+    "answer": "Conflicting WBC results for same patient on same date"
+  },
+  {
+    "dataset": [
+      [
+        "Grace Johnson",
+        "1973-05-10",
+        "Cardiology"
+      ],
+      [
+        "Henry Johnson",
+        "1961-12-20",
+        "Oncology"
+      ]
+    ],
+    "question": "The AI merged these as duplicates (same last name). What's wrong?",
+    "options": [
+      "Last name format is different",
+      "The specialty field is inconsistent",
+      "Different first names AND DOBs — these are two distinct patients"
+    ],
+    "answer": "Different first names AND DOBs — these are two distinct patients"
+  },
+  {
+    "dataset": [
+      [
+        "Unity Hospital",
+        "131 Beds",
+        "ICU: Yes"
+      ],
+      [
+        "Unity Hospital",
+        "231 Beds",
+        "ICU: Yes"
+      ]
+    ],
+    "question": "The AI merged these as the same hospital. What should it have flagged?",
+    "options": [
+      "Nothing wrong — name variations are expected",
+      "ICU field should not be included",
+      "Critical bed count difference (131 vs 231) suggests different facilities"
+    ],
+    "answer": "Critical bed count difference (131 vs 231) suggests different facilities"
+  },
+  {
+    "dataset": [
+      [
+        "NPI: 1234544382",
+        "Dr. Henry Jones",
+        "Orthopedics",
+        "State: CA"
+      ],
+      [
+        "NPI: 1234544382",
+        "Dr. Henry Jones",
+        "Orthopedics",
+        "State: TX"
+      ]
+    ],
+    "question": "Same NPI in two states. What should the AI flag?",
+    "options": [
+      "Flag for human review — NPI is nationally unique and this is a potential data error",
+      "This is valid — doctors can practice in multiple states",
+      "The specialty should be split"
+    ],
+    "answer": "Flag for human review — NPI is nationally unique and this is a potential data error"
+  },
+  {
+    "dataset": [
+      [
+        "Warfarin",
+        "100mg",
+        "Sublingual",
+        "Daily"
+      ],
+      [
+        "Warfarin",
+        "5mg",
+        "Sublingual",
+        "Daily"
+      ]
+    ],
+    "question": "The AI kept one record. Which approach is correct?",
+    "options": [
+      "Merge them — same drug and route is sufficient for deduplication",
+      "Delete both — conflicting data should always be removed",
+      "Keep both — different doses (100mg vs 5mg) represent distinct prescriptions"
+    ],
+    "answer": "Keep both — different doses (100mg vs 5mg) represent distinct prescriptions"
+  },
+  {
+    "dataset": [
+      [
+        "Henry Moore",
+        "555-904-7612",
+        "user2@example.com"
+      ],
+      [
+        "Henry Moore",
+        "555-904-7612",
+        "user564@hospital.org"
+      ],
+      [
+        "Henry Moore",
+        "555-921-9664",
+        "user2@example.com"
+      ]
+    ],
+    "question": "What data inconsistency did the AI fail to flag?",
+    "options": [
+      "Phone number format is inconsistent",
+      "Email format is invalid",
+      "Multiple conflicting phone+email combinations make the correct contact ambiguous"
+    ],
+    "answer": "Multiple conflicting phone+email combinations make the correct contact ambiguous"
+  },
+  {
+    "dataset": [
+      [
+        "Wellness Plus",
+        "Delhi",
+        "OPEN"
+      ],
+      [
+        "Wellness Plus Inc.",
+        "Delhi",
+        "SUSPENDED"
+      ]
+    ],
+    "question": "The AI couldn't decide if these are duplicates. What's the critical conflict?",
+    "options": [
+      "Pharmacy types are not comparable",
+      "City name should be a state code",
+      "Name format differs AND operational status conflicts (OPEN vs SUSPENDED)"
+    ],
+    "answer": "Name format differs AND operational status conflicts (OPEN vs SUSPENDED)"
+  },
+  {
+    "dataset": [
+      [
+        "Fortis Clinic",
+        "Mumbai",
+        "DL"
+      ]
+    ],
+    "question": "What did the AI get wrong in this hospital record?",
+    "options": [
+      "Wrong state code for Mumbai (should be MH)",
+      "Duplicate hospital entry",
+      "Nothing is wrong"
+    ],
+    "answer": "Wrong state code for Mumbai (should be MH)"
+  },
+  {
+    "dataset": [
+      [
+        "Dr. Frank Davis",
+        "Neurology",
+        "Chicago"
+      ],
+      [
+        "Dr. Frank Davis",
+        "Pediatrics",
+        "Chicago"
+      ]
+    ],
+    "question": "What error did the AI make in this doctor record?",
+    "options": [
+      "Conflicting specialties for same doctor (Neurology vs Pediatrics)",
+      "Wrong doctor name format",
+      "City field is duplicated"
+    ],
+    "answer": "Conflicting specialties for same doctor (Neurology vs Pediatrics)"
+  },
+  {
+    "dataset": [
+      [
+        "Claim #4596",
+        "Henry Brown",
+        "$547",
+        "PENDING"
+      ],
+      [
+        "Claim #4596",
+        "Henry Brown",
+        "$547",
+        "CLOSED"
+      ]
+    ],
+    "question": "The AI kept both records. What's critically wrong?",
+    "options": [
+      "Claim amount is incorrect",
+      "Name format is inconsistent",
+      "Same claim cannot be both PENDING and CLOSED"
+    ],
+    "answer": "Same claim cannot be both PENDING and CLOSED"
+  },
+  {
+    "dataset": [
+      [
+        "Patient: 4040",
+        "Lab: WBC",
+        "Date: 2024-05-22",
+        "6.7 (NORMAL)"
+      ],
+      [
+        "Patient: 4040",
+        "Lab: WBC",
+        "Date: 2024-05-22",
+        "15.7 (HIGH)"
+      ]
+    ],
+    "question": "What is the most dangerous AI error in this lab record?",
+    "options": [
+      "Date format is inconsistent",
+      "Lab test name is abbreviated",
+      "Conflicting WBC results for same patient on same date"
+    ],
+    "answer": "Conflicting WBC results for same patient on same date"
+  },
+  {
+    "dataset": [
+      [
+        "Leo Garcia",
+        "1990-06-14",
+        "Cardiology"
+      ],
+      [
+        "Bob Garcia",
+        "1972-10-10",
+        "Oncology"
+      ]
+    ],
+    "question": "The AI merged these as duplicates (same last name). What's wrong?",
+    "options": [
+      "Different first names AND DOBs — these are two distinct patients",
+      "The specialty field is inconsistent",
+      "Last name format is different"
+    ],
+    "answer": "Different first names AND DOBs — these are two distinct patients"
+  },
+  {
+    "dataset": [
+      [
+        "Memorial Hospital",
+        "180 Beds",
+        "ICU: Yes"
+      ],
+      [
+        "memorial",
+        "280 Beds",
+        "ICU: Yes"
+      ]
+    ],
+    "question": "The AI merged these as the same hospital. What should it have flagged?",
+    "options": [
+      "Nothing wrong — name variations are expected",
+      "Critical bed count difference (180 vs 280) suggests different facilities",
+      "ICU field should not be included"
+    ],
+    "answer": "Critical bed count difference (180 vs 280) suggests different facilities"
+  },
+  {
+    "dataset": [
+      [
+        "NPI: 1234553679",
+        "Dr. Bob Wilson",
+        "Neurology",
+        "State: CA"
+      ],
+      [
+        "NPI: 1234553679",
+        "Dr. Bob Wilson",
+        "Neurology",
+        "State: TX"
+      ]
+    ],
+    "question": "Same NPI in two states. What should the AI flag?",
+    "options": [
+      "Flag for human review — NPI is nationally unique and this is a potential data error",
+      "The specialty should be split",
+      "This is valid — doctors can practice in multiple states"
+    ],
+    "answer": "Flag for human review — NPI is nationally unique and this is a potential data error"
+  },
+  {
+    "dataset": [
+      [
+        "Aspirin",
+        "100mg",
+        "IV",
+        "Daily"
+      ],
+      [
+        "Aspirin",
+        "2000mg",
+        "IV",
+        "Daily"
+      ]
+    ],
+    "question": "The AI kept one record. Which approach is correct?",
+    "options": [
+      "Keep both — different doses (100mg vs 2000mg) represent distinct prescriptions",
+      "Delete both — conflicting data should always be removed",
+      "Merge them — same drug and route is sufficient for deduplication"
+    ],
+    "answer": "Keep both — different doses (100mg vs 2000mg) represent distinct prescriptions"
+  },
+  {
+    "dataset": [
+      [
+        "Eva Moore",
+        "555-324-9671",
+        "user26@example.com"
+      ],
+      [
+        "Eva Moore",
+        "555-324-9671",
+        "user933@hospital.org"
+      ],
+      [
+        "Eva Moore",
+        "555-639-4142",
+        "user26@example.com"
+      ]
+    ],
+    "question": "What data inconsistency did the AI fail to flag?",
+    "options": [
+      "Multiple conflicting phone+email combinations make the correct contact ambiguous",
+      "Phone number format is inconsistent",
+      "Email format is invalid"
+    ],
+    "answer": "Multiple conflicting phone+email combinations make the correct contact ambiguous"
+  },
+  {
+    "dataset": [
+      [
+        "Apollo Pharmacy",
+        "Chicago",
+        "ACTIVE"
+      ],
+      [
+        "Apollo Pharmacy Inc.",
+        "Chicago",
+        "CLOSED"
+      ]
+    ],
+    "question": "The AI couldn't decide if these are duplicates. What's the critical conflict?",
+    "options": [
+      "Pharmacy types are not comparable",
+      "City name should be a state code",
+      "Name format differs AND operational status conflicts (ACTIVE vs CLOSED)"
+    ],
+    "answer": "Name format differs AND operational status conflicts (ACTIVE vs CLOSED)"
+  },
+  {
+    "dataset": [
+      [
+        "Max Hospital",
+        "Boston",
+        "NY"
+      ]
+    ],
+    "question": "What did the AI get wrong in this hospital record?",
+    "options": [
+      "Wrong state code for Boston (should be MA)",
+      "Nothing is wrong",
+      "Duplicate hospital entry"
+    ],
+    "answer": "Wrong state code for Boston (should be MA)"
+  },
+  {
+    "dataset": [
+      [
+        "Dr. James Brown",
+        "Neurology",
+        "Chicago"
+      ],
+      [
+        "Dr. James Brown",
+        "Radiology",
+        "Chicago"
+      ]
+    ],
+    "question": "What error did the AI make in this doctor record?",
+    "options": [
+      "City field is duplicated",
+      "Conflicting specialties for same doctor (Neurology vs Radiology)",
+      "Wrong doctor name format"
+    ],
+    "answer": "Conflicting specialties for same doctor (Neurology vs Radiology)"
+  },
+  {
+    "dataset": [
+      [
+        "Claim #9563",
+        "Irene Williams",
+        "$887",
+        "APPROVED"
+      ],
+      [
+        "Claim #9563",
+        "Irene Williams",
+        "$887",
+        "DENIED"
+      ]
+    ],
+    "question": "The AI kept both records. What's critically wrong?",
+    "options": [
+      "Same claim cannot be both APPROVED and DENIED",
+      "Claim amount is incorrect",
+      "Name format is inconsistent"
+    ],
+    "answer": "Same claim cannot be both APPROVED and DENIED"
+  },
+  {
+    "dataset": [
+      [
+        "Patient: 4758",
+        "Lab: eGFR",
+        "Date: 2024-06-15",
+        "93 (NORMAL)"
+      ],
+      [
+        "Patient: 4758",
+        "Lab: eGFR",
+        "Date: 2024-06-15",
+        "42 (STAGE 3 CKD)"
+      ]
+    ],
+    "question": "What is the most dangerous AI error in this lab record?",
+    "options": [
+      "Conflicting eGFR results for same patient on same date",
+      "Date format is inconsistent",
+      "Lab test name is abbreviated"
+    ],
+    "answer": "Conflicting eGFR results for same patient on same date"
+  },
+  {
+    "dataset": [
+      [
+        "Karen Moore",
+        "1983-09-12",
+        "Cardiology"
+      ],
+      [
+        "Irene Moore",
+        "1978-11-20",
+        "Oncology"
+      ]
+    ],
+    "question": "The AI merged these as duplicates (same last name). What's wrong?",
+    "options": [
+      "Last name format is different",
+      "The specialty field is inconsistent",
+      "Different first names AND DOBs — these are two distinct patients"
+    ],
+    "answer": "Different first names AND DOBs — these are two distinct patients"
+  },
+  {
+    "dataset": [
+      [
+        "Metro Hospital",
+        "95 Beds",
+        "ICU: Yes"
+      ],
+      [
+        "metro",
+        "195 Beds",
+        "ICU: Yes"
+      ]
+    ],
+    "question": "The AI merged these as the same hospital. What should it have flagged?",
+    "options": [
+      "ICU field should not be included",
+      "Nothing wrong — name variations are expected",
+      "Critical bed count difference (95 vs 195) suggests different facilities"
+    ],
+    "answer": "Critical bed count difference (95 vs 195) suggests different facilities"
+  },
+  {
+    "dataset": [
+      [
+        "NPI: 1234514190",
+        "Dr. Carol Williams",
+        "Cardiology",
+        "State: CA"
+      ],
+      [
+        "NPI: 1234514190",
+        "Dr. Carol Williams",
+        "Cardiology",
+        "State: TX"
+      ]
+    ],
+    "question": "Same NPI in two states. What should the AI flag?",
+    "options": [
+      "Flag for human review — NPI is nationally unique and this is a potential data error",
+      "This is valid — doctors can practice in multiple states",
+      "The specialty should be split"
+    ],
+    "answer": "Flag for human review — NPI is nationally unique and this is a potential data error"
+  },
+  {
+    "dataset": [
+      [
+        "Insulin",
+        "250mg",
+        "Sublingual",
+        "Daily"
+      ],
+      [
+        "Insulin",
+        "1000mg",
+        "Sublingual",
+        "Daily"
+      ]
+    ],
+    "question": "The AI kept one record. Which approach is correct?",
+    "options": [
+      "Keep both — different doses (250mg vs 1000mg) represent distinct prescriptions",
+      "Merge them — same drug and route is sufficient for deduplication",
+      "Delete both — conflicting data should always be removed"
+    ],
+    "answer": "Keep both — different doses (250mg vs 1000mg) represent distinct prescriptions"
+  },
+  {
+    "dataset": [
+      [
+        "David Miller",
+        "555-927-8968",
+        "user67@example.com"
+      ],
+      [
+        "David Miller",
+        "555-927-8968",
+        "user953@hospital.org"
+      ],
+      [
+        "David Miller",
+        "555-501-2499",
+        "user67@example.com"
+      ]
+    ],
+    "question": "What data inconsistency did the AI fail to flag?",
+    "options": [
+      "Email format is invalid",
+      "Multiple conflicting phone+email combinations make the correct contact ambiguous",
+      "Phone number format is inconsistent"
+    ],
+    "answer": "Multiple conflicting phone+email combinations make the correct contact ambiguous"
+  },
+  {
+    "dataset": [
+      [
+        "MedPlus",
+        "Atlanta",
+        "IN-NETWORK"
+      ],
+      [
+        "MedPlus Inc.",
+        "Atlanta",
+        "OUT-OF-NETWORK"
+      ]
+    ],
+    "question": "The AI couldn't decide if these are duplicates. What's the critical conflict?",
+    "options": [
+      "Name format differs AND operational status conflicts (IN-NETWORK vs OUT-OF-NETWORK)",
+      "City name should be a state code",
+      "Pharmacy types are not comparable"
+    ],
+    "answer": "Name format differs AND operational status conflicts (IN-NETWORK vs OUT-OF-NETWORK)"
+  },
+  {
+    "dataset": [
+      [
+        "Max Hospital",
+        "Atlanta",
+        "FL"
+      ]
+    ],
+    "question": "What did the AI get wrong in this hospital record?",
+    "options": [
+      "Nothing is wrong",
+      "Duplicate hospital entry",
+      "Wrong state code for Atlanta (should be GA)"
+    ],
+    "answer": "Wrong state code for Atlanta (should be GA)"
+  },
+  {
+    "dataset": [
+      [
+        "Dr. Irene Miller",
+        "Radiology",
+        "Chicago"
+      ],
+      [
+        "Dr. Irene Miller",
+        "Cardiology",
+        "Chicago"
+      ]
+    ],
+    "question": "What error did the AI make in this doctor record?",
+    "options": [
+      "Wrong doctor name format",
+      "Conflicting specialties for same doctor (Radiology vs Cardiology)",
+      "City field is duplicated"
+    ],
+    "answer": "Conflicting specialties for same doctor (Radiology vs Cardiology)"
+  },
+  {
+    "dataset": [
+      [
+        "Claim #3032",
+        "Bob Moore",
+        "$3803",
+        "APPROVED"
+      ],
+      [
+        "Claim #3032",
+        "Bob Moore",
+        "$3803",
+        "DENIED"
+      ]
+    ],
+    "question": "The AI kept both records. What's critically wrong?",
+    "options": [
+      "Claim amount is incorrect",
+      "Name format is inconsistent",
+      "Same claim cannot be both APPROVED and DENIED"
+    ],
+    "answer": "Same claim cannot be both APPROVED and DENIED"
+  },
+  {
+    "dataset": [
+      [
+        "Patient: 3833",
+        "Lab: eGFR",
+        "Date: 2024-02-22",
+        "90 (NORMAL)"
+      ],
+      [
+        "Patient: 3833",
+        "Lab: eGFR",
+        "Date: 2024-02-22",
+        "27 (STAGE 3 CKD)"
+      ]
+    ],
+    "question": "What is the most dangerous AI error in this lab record?",
+    "options": [
+      "Conflicting eGFR results for same patient on same date",
+      "Date format is inconsistent",
+      "Lab test name is abbreviated"
+    ],
+    "answer": "Conflicting eGFR results for same patient on same date"
+  },
+  {
+    "dataset": [
+      [
+        "Irene Davis",
+        "1973-07-28",
+        "Cardiology"
+      ],
+      [
+        "Grace Davis",
+        "1961-12-16",
+        "Oncology"
+      ]
+    ],
+    "question": "The AI merged these as duplicates (same last name). What's wrong?",
+    "options": [
+      "Last name format is different",
+      "Different first names AND DOBs — these are two distinct patients",
+      "The specialty field is inconsistent"
+    ],
+    "answer": "Different first names AND DOBs — these are two distinct patients"
+  },
+  {
+    "dataset": [
+      [
+        "Unity Hospital",
+        "125 Beds",
+        "ICU: Yes"
+      ],
+      [
+        "Unity",
+        "225 Beds",
+        "ICU: Yes"
+      ]
+    ],
+    "question": "The AI merged these as the same hospital. What should it have flagged?",
+    "options": [
+      "ICU field should not be included",
+      "Nothing wrong — name variations are expected",
+      "Critical bed count difference (125 vs 225) suggests different facilities"
+    ],
+    "answer": "Critical bed count difference (125 vs 225) suggests different facilities"
+  },
+  {
+    "dataset": [
+      [
+        "NPI: 1234561250",
+        "Dr. Frank Moore",
+        "Oncology",
+        "State: CA"
+      ],
+      [
+        "NPI: 1234561250",
+        "Dr. Frank Moore",
+        "Oncology",
+        "State: TX"
+      ]
+    ],
+    "question": "Same NPI in two states. What should the AI flag?",
+    "options": [
+      "The specialty should be split",
+      "This is valid — doctors can practice in multiple states",
+      "Flag for human review — NPI is nationally unique and this is a potential data error"
+    ],
+    "answer": "Flag for human review — NPI is nationally unique and this is a potential data error"
+  },
+  {
+    "dataset": [
+      [
+        "Lisinopril",
+        "500mg",
+        "Sublingual",
+        "Daily"
+      ],
+      [
+        "Lisinopril",
+        "2000mg",
+        "Sublingual",
+        "Daily"
+      ]
+    ],
+    "question": "The AI kept one record. Which approach is correct?",
+    "options": [
+      "Delete both — conflicting data should always be removed",
+      "Merge them — same drug and route is sufficient for deduplication",
+      "Keep both — different doses (500mg vs 2000mg) represent distinct prescriptions"
+    ],
+    "answer": "Keep both — different doses (500mg vs 2000mg) represent distinct prescriptions"
+  },
+  {
+    "dataset": [
+      [
+        "Bob Williams",
+        "555-743-2145",
+        "user5@example.com"
+      ],
+      [
+        "Bob Williams",
+        "555-743-2145",
+        "user747@hospital.org"
+      ],
+      [
+        "Bob Williams",
+        "555-551-6146",
+        "user5@example.com"
+      ]
+    ],
+    "question": "What data inconsistency did the AI fail to flag?",
+    "options": [
+      "Phone number format is inconsistent",
+      "Email format is invalid",
+      "Multiple conflicting phone+email combinations make the correct contact ambiguous"
+    ],
+    "answer": "Multiple conflicting phone+email combinations make the correct contact ambiguous"
+  },
+  {
+    "dataset": [
+      [
+        "City Drugs",
+        "Chicago",
+        "IN-NETWORK"
+      ],
+      [
+        "City Drugs Inc.",
+        "Chicago",
+        "OUT-OF-NETWORK"
+      ]
+    ],
+    "question": "The AI couldn't decide if these are duplicates. What's the critical conflict?",
+    "options": [
+      "Pharmacy types are not comparable",
+      "City name should be a state code",
+      "Name format differs AND operational status conflicts (IN-NETWORK vs OUT-OF-NETWORK)"
+    ],
+    "answer": "Name format differs AND operational status conflicts (IN-NETWORK vs OUT-OF-NETWORK)"
+  },
+  {
+    "dataset": [
+      [
+        "Max Medical Center",
+        "Mumbai",
+        "DL"
+      ]
+    ],
+    "question": "What did the AI get wrong in this hospital record?",
+    "options": [
+      "Wrong state code for Mumbai (should be MH)",
+      "Duplicate hospital entry",
+      "Nothing is wrong"
+    ],
+    "answer": "Wrong state code for Mumbai (should be MH)"
+  },
+  {
+    "dataset": [
+      [
+        "Dr. Leo Davis",
+        "Oncology",
+        "Phoenix"
+      ],
+      [
+        "Dr. Leo Davis",
+        "Pediatrics",
+        "Phoenix"
+      ]
+    ],
+    "question": "What error did the AI make in this doctor record?",
+    "options": [
+      "Conflicting specialties for same doctor (Oncology vs Pediatrics)",
+      "Wrong doctor name format",
+      "City field is duplicated"
+    ],
+    "answer": "Conflicting specialties for same doctor (Oncology vs Pediatrics)"
+  },
+  {
+    "dataset": [
+      [
+        "Claim #5350",
+        "Leo Wilson",
+        "$3618",
+        "ACTIVE"
+      ],
+      [
+        "Claim #5350",
+        "Leo Wilson",
+        "$3618",
+        "CANCELLED"
+      ]
+    ],
+    "question": "The AI kept both records. What's critically wrong?",
+    "options": [
+      "Same claim cannot be both ACTIVE and CANCELLED",
+      "Name format is inconsistent",
+      "Claim amount is incorrect"
+    ],
+    "answer": "Same claim cannot be both ACTIVE and CANCELLED"
+  },
+  {
+    "dataset": [
+      [
+        "Patient: 3731",
+        "Lab: HbA1c",
+        "Date: 2024-04-21",
+        "5.4% (NORMAL)"
+      ],
+      [
+        "Patient: 3731",
+        "Lab: HbA1c",
+        "Date: 2024-04-21",
+        "9.9% (DIABETIC)"
+      ]
+    ],
+    "question": "What is the most dangerous AI error in this lab record?",
+    "options": [
+      "Conflicting HbA1c results for same patient on same date",
+      "Date format is inconsistent",
+      "Lab test name is abbreviated"
+    ],
+    "answer": "Conflicting HbA1c results for same patient on same date"
+  },
+  {
+    "dataset": [
+      [
+        "Carol Brown",
+        "1971-01-24",
+        "Cardiology"
+      ],
+      [
+        "Henry Brown",
+        "1973-10-20",
+        "Oncology"
+      ]
+    ],
+    "question": "The AI merged these as duplicates (same last name). What's wrong?",
+    "options": [
+      "The specialty field is inconsistent",
+      "Different first names AND DOBs — these are two distinct patients",
+      "Last name format is different"
+    ],
+    "answer": "Different first names AND DOBs — these are two distinct patients"
+  },
+  {
+    "dataset": [
+      [
+        "Memorial Hospital",
+        "179 Beds",
+        "ICU: Yes"
+      ],
+      [
+        "Memorial",
+        "479 Beds",
+        "ICU: Yes"
+      ]
+    ],
+    "question": "The AI merged these as the same hospital. What should it have flagged?",
+    "options": [
+      "Critical bed count difference (179 vs 479) suggests different facilities",
+      "Nothing wrong — name variations are expected",
+      "ICU field should not be included"
+    ],
+    "answer": "Critical bed count difference (179 vs 479) suggests different facilities"
+  },
+  {
+    "dataset": [
+      [
+        "NPI: 1234530867",
+        "Dr. Grace Davis",
+        "Oncology",
+        "State: CA"
+      ],
+      [
+        "NPI: 1234530867",
+        "Dr. Grace Davis",
+        "Oncology",
+        "State: TX"
+      ]
+    ],
+    "question": "Same NPI in two states. What should the AI flag?",
+    "options": [
+      "Flag for human review — NPI is nationally unique and this is a potential data error",
+      "This is valid — doctors can practice in multiple states",
+      "The specialty should be split"
+    ],
+    "answer": "Flag for human review — NPI is nationally unique and this is a potential data error"
+  },
+  {
+    "dataset": [
+      [
+        "Lisinopril",
+        "500mg",
+        "Sublingual",
+        "Daily"
+      ],
+      [
+        "Lisinopril",
+        "2000mg",
+        "Sublingual",
+        "Daily"
+      ]
+    ],
+    "question": "The AI kept one record. Which approach is correct?",
+    "options": [
+      "Delete both — conflicting data should always be removed",
+      "Merge them — same drug and route is sufficient for deduplication",
+      "Keep both — different doses (500mg vs 2000mg) represent distinct prescriptions"
+    ],
+    "answer": "Keep both — different doses (500mg vs 2000mg) represent distinct prescriptions"
+  },
+  {
+    "dataset": [
+      [
+        "James Brown",
+        "555-558-9933",
+        "user97@example.com"
+      ],
+      [
+        "James Brown",
+        "555-558-9933",
+        "user910@hospital.org"
+      ],
+      [
+        "James Brown",
+        "555-987-3114",
+        "user97@example.com"
+      ]
+    ],
+    "question": "What data inconsistency did the AI fail to flag?",
+    "options": [
+      "Multiple conflicting phone+email combinations make the correct contact ambiguous",
+      "Email format is invalid",
+      "Phone number format is inconsistent"
+    ],
+    "answer": "Multiple conflicting phone+email combinations make the correct contact ambiguous"
+  },
+  {
+    "dataset": [
+      [
+        "MedPlus",
+        "Mumbai",
+        "ACTIVE"
+      ],
+      [
+        "MedPlus Inc.",
+        "Mumbai",
+        "CLOSED"
+      ]
+    ],
+    "question": "The AI couldn't decide if these are duplicates. What's the critical conflict?",
+    "options": [
+      "Name format differs AND operational status conflicts (ACTIVE vs CLOSED)",
+      "City name should be a state code",
+      "Pharmacy types are not comparable"
+    ],
+    "answer": "Name format differs AND operational status conflicts (ACTIVE vs CLOSED)"
+  }
 ]
