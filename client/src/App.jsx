@@ -6,11 +6,11 @@ import FinalScoreScreen from './components/FinalScoreScreen';
 import Leaderboard from './components/Leaderboard';
 import LiveLeaderboard from './components/LiveLeaderboard';
 import './index.css';
+
 function App() {
   const [gameState, setGameState] = useState('START'); // START, PLAYING, END, LEADERBOARD
   const [playerName, setPlayerName] = useState('');
-  const [round1Score, setRound1Score] = useState(0);
-  const [round2Score, setRound2Score] = useState(0);
+  const [score, setScore] = useState(0);
 
   // Global operator shortcut 'N' to reset game
   useEffect(() => {
@@ -19,11 +19,10 @@ function App() {
       if (e.target.tagName.toLowerCase() === 'input') return;
 
       if (e.key.toLowerCase() === 'n') {
-        e.preventDefault(); // <-- Prevent typing N into the newly instantly focused input field
+        e.preventDefault();
         setGameState('START');
         setPlayerName('');
-        setRound1Score(0);
-        setRound2Score(0);
+        setScore(0);
       }
     };
     window.addEventListener('keydown', handleKeyDown);
@@ -32,14 +31,12 @@ function App() {
 
   const startGame = (name) => {
     setPlayerName(name);
-    setRound1Score(0);
-    setRound2Score(0);
+    setScore(0);
     setGameState('PLAYING');
   };
 
-  const handleGameEnd = (r1Score, r2Score) => {
-    setRound1Score(r1Score);
-    setRound2Score(r2Score);
+  const handleGameEnd = (finalScore) => {
+    setScore(finalScore);
     setGameState('END');
   };
 
@@ -65,14 +62,12 @@ function App() {
           {gameState === 'END' && (
             <FinalScoreScreen
               playerName={playerName}
-              round1Score={round1Score}
-              round2Score={round2Score}
+              score={score}
               onViewLeaderboard={() => setGameState('LEADERBOARD')}
               onNextPlayer={() => {
                 setGameState('START');
                 setPlayerName('');
-                setRound1Score(0);
-                setRound2Score(0);
+                setScore(0);
               }}
             />
           )}
@@ -83,8 +78,7 @@ function App() {
               onBack={() => {
                 setGameState('START');
                 setPlayerName('');
-                setRound1Score(0);
-                setRound2Score(0);
+                setScore(0);
               }}
             />
           )}

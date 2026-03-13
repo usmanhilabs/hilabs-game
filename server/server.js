@@ -80,20 +80,6 @@ app.get('/questions/round1', (req, res) => {
   }
 });
 
-app.get('/questions/round2', (req, res) => {
-    try {
-      const questionsPath = path.join(dataPath, 'round2_questions.json');
-      if (!fs.existsSync(questionsPath)) {
-          return res.json([]);
-      }
-      const data = fs.readFileSync(questionsPath, 'utf8');
-      res.json(JSON.parse(data));
-    } catch (error) {
-      console.error('Error reading round 2 questions:', error);
-      res.status(500).json({ error: 'Failed to read questions' });
-    }
-  });
-
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

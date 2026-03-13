@@ -3,8 +3,7 @@ import confetti from 'canvas-confetti';
 
 const API_URL = 'http://localhost:3001';
 
-const FinalScoreScreen = ({ playerName, round1Score, round2Score, onViewLeaderboard, onNextPlayer }) => {
-    const totalScore = round1Score + round2Score;
+const FinalScoreScreen = ({ playerName, score, onViewLeaderboard, onNextPlayer }) => {
     const [saved, setSaved] = useState(false);
     const [displayScore, setDisplayScore] = useState(0);
     const [isWinner, setIsWinner] = useState(false);
@@ -14,19 +13,25 @@ const FinalScoreScreen = ({ playerName, round1Score, round2Score, onViewLeaderbo
     const WIN_THRESHOLD = parseInt(import.meta.env.VITE_WIN_THRESHOLD) || 200;
 
     useEffect(() => {
-        // Count up animation
+        // Count animation
         let current = 0;
+        if (score === 0) {
+            setDisplayScore(0);
+            return;
+        }
+        const step = Math.ceil(Math.abs(score) / 20) || 1;
+        const direction = score > 0 ? 1 : -1;
         const interval = setInterval(() => {
-            current += Math.ceil(totalScore / 20) || 1;
-            if (current >= totalScore) {
-                current = totalScore;
+            current += step * direction;
+            if ((direction > 0 && current >= score) || (direction < 0 && current <= score)) {
+                current = score;
                 clearInterval(interval);
             }
             setDisplayScore(current);
         }, 50);
 
         return () => clearInterval(interval);
-    }, [totalScore]);
+    }, [score]);
 
     useEffect(() => {
         // Post to leaderboard
@@ -36,19 +41,21 @@ const FinalScoreScreen = ({ playerName, round1Score, round2Score, onViewLeaderbo
             fetch(`${API_URL}/leaderboard`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name: playerName, score: totalScore })
+                body: JSON.stringify({ name: playerName, score: score })
             })
                 .then(res => res.json())
                 .then(data => {
                     setSaved(true);
-                    // Randomly decide if we show confetti, or better, if score is very high (say > 100)
-                    if (totalScore > 100) {
+                    if (score > 100) {
                         triggerConfetti();
+                    }
+                    if (score >= WIN_THRESHOLD) {
+                        setIsWinner(true);
                     }
                 })
                 .catch(err => console.error("Failed to save score:", err));
         }
-    }, [playerName, totalScore, saved]);
+    }, [playerName, score, saved, WIN_THRESHOLD]);
 
     const triggerConfetti = () => {
         var end = Date.now() + (3 * 1000);
@@ -85,15 +92,6 @@ const FinalScoreScreen = ({ playerName, round1Score, round2Score, onViewLeaderbo
             <h2 style={{ color: 'white' }}>{playerName}'s Report</h2>
 
             <div style={{ margin: '3rem 0', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                <div className="flex justify-between items-center" style={{ fontSize: '1.2rem', color: 'var(--color-text-muted)' }}>
-                    <span>Round 1: Fix The Dataset</span>
-                    <span>{round1Score} pts</span>
-                </div>
-                <div className="flex justify-between items-center" style={{ fontSize: '1.2rem', color: 'var(--color-text-muted)' }}>
-                    <span>Round 2: Beat the AI</span>
-                    <span>{round2Score} pts</span>
-                </div>
-                <div style={{ height: '1px', background: 'var(--color-navy-light)', margin: '1rem 0' }}></div>
                 <div style={{
                     background: isWinner ? 'rgba(0, 210, 255, 0.1)' : 'rgba(0,0,0,0.3)',
                     border: isWinner ? '2px solid var(--color-blue)' : 'none',
@@ -104,15 +102,14 @@ const FinalScoreScreen = ({ playerName, round1Score, round2Score, onViewLeaderbo
                     transition: 'all 0.5s ease'
                 }}>
                     <div style={{ fontSize: '1.5rem', marginBottom: '1rem', color: 'var(--color-text-muted)' }}>
-                        Round 1: {round1Score} pts <br />
-                        Round 2: {round2Score} pts
+                        Final Score
                     </div>
                     <div style={{
                         fontSize: '4rem',
                         fontWeight: 'bold',
                         color: isWinner ? 'var(--color-blue)' : 'var(--color-orange)',
                         textShadow: isWinner ? 'var(--glow-blue)' : 'var(--glow-orange)',
-                        animation: displayScore === totalScore ? 'countUp 0.5s ease' : 'none'
+                        animation: displayScore === score ? 'countUp 0.5s ease' : 'none'
                     }}>
                         {displayScore}
                     </div>

@@ -19,7 +19,7 @@ services:
     ports:
       - "5173:5173"
     environment:
-      - VITE_ROUND_TIME=30
+      - VITE_ROUND_TIME=45
       - VITE_GAME_TITLE="Beat the AI"
       - VITE_GAME_SUBTITLE="Data Cleaning Challenge"
       - VITE_ROUND1_TITLE="Fix The Dataset"

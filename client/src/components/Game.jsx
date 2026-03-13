@@ -2,22 +2,20 @@ import React, { useState, useEffect } from 'react';
 import QuestionCard from './QuestionCard';
 
 const API_URL = 'http://localhost:3001';
-const ROUND_TIME = parseInt(import.meta.env.VITE_ROUND_TIME) || 30; // seconds
+const ROUND_TIME = parseInt(import.meta.env.VITE_ROUND_TIME) || 45; // 45 seconds default
 
 const Game = ({ playerName, onEnd }) => {
-    const [round, setRound] = useState(1);
     const [timeLeft, setTimeLeft] = useState(ROUND_TIME);
     const [questions, setQuestions] = useState([]);
     const [currentQIndex, setCurrentQIndex] = useState(0);
 
-    const [round1Score, setRound1Score] = useState(0);
-    const [round2Score, setRound2Score] = useState(0);
+    const [score, setScore] = useState(0);
 
     const [showTransition, setShowTransition] = useState(true);
 
     // Fetch questions on round start
     useEffect(() => {
-        fetch(`${API_URL}/questions/round${round}`)
+        fetch(`${API_URL}/questions/round1`)
             .then(res => res.json())
             .then(data => {
                 // Simple shuffle
@@ -34,10 +32,10 @@ const Game = ({ playerName, onEnd }) => {
         // Hide transition screen after a delay
         const transitionTimer = setTimeout(() => {
             setShowTransition(false);
-        }, 2500);
+        }, 1500);
 
         return () => clearTimeout(transitionTimer);
-    }, [round]);
+    }, []);
 
     // Timer logic
     useEffect(() => {
@@ -49,7 +47,6 @@ const Game = ({ playerName, onEnd }) => {
                 setTimeLeft(prev => prev - 1);
             }, 1000);
         } else if (!showTransition && timeLeft <= 0) {
-            // End the round exactly when timer hits 0 and we aren't transitioning
             handleRoundEnd();
         }
 
@@ -59,23 +56,16 @@ const Game = ({ playerName, onEnd }) => {
     }, [timeLeft, showTransition]);
 
     const handleRoundEnd = () => {
-        if (round === 1) {
-            setShowTransition(true);
-            setRound(2); // Start round 2
-            setTimeLeft(ROUND_TIME); // Reset timer explicitly for round 2
-        } else {
-            // Game over
-            onEnd(round1Score, round2Score);
-        }
+        onEnd(score);
     };
 
-    const currentScore = round === 1 ? round1Score : round2Score;
-
     const handleAnswer = (isCorrect) => {
+        const points = 10;
         if (isCorrect) {
-            const points = round === 1 ? 10 : 15;
-            if (round === 1) setRound1Score(prev => prev + points);
-            if (round === 2) setRound2Score(prev => prev + points);
+            setScore(prev => prev + points);
+        } else {
+            const penalty = points / 2;
+            setScore(prev => prev - penalty);
         }
 
         // Move to next question, loop back to start if we run out
@@ -90,15 +80,13 @@ const Game = ({ playerName, onEnd }) => {
         return (
             <div className="container" style={{ textAlign: 'center', animation: 'fadeIn 0.5s ease-out' }}>
                 <h1 style={{ fontSize: '4rem', marginBottom: '1rem', color: 'white' }}>
-                    {round === 1 ? 'Get Ready!' : 'Round 1 Complete!'}
+                    Get Ready!
                 </h1>
                 <h2 style={{ fontSize: '2.5rem', color: 'var(--color-orange)', animation: 'pulse-glow 1.5s infinite alternate' }}>
-                    {round === 1 ? 'Starting Round 1...' : 'Starting Round 2...'}
+                    Starting Game...
                 </h2>
                 <div style={{ marginTop: '2rem', fontSize: '1.2rem', color: 'var(--color-text-muted)' }}>
-                    {round === 1
-                        ? (import.meta.env.VITE_ROUND1_TITLE || 'Fix The Dataset')
-                        : (import.meta.env.VITE_ROUND2_TITLE || 'Beat the AI')}
+                    {import.meta.env.VITE_ROUND1_TITLE || 'Fix The Dataset'}
                 </div>
             </div>
         );
@@ -120,7 +108,7 @@ const Game = ({ playerName, onEnd }) => {
             }}>
                 <div>
                     <h2 style={{ margin: 0, textAlign: 'left', color: 'white' }}>
-                        Round {round}: {round === 1 ? (import.meta.env.VITE_ROUND1_TITLE || 'Fix The Dataset') : (import.meta.env.VITE_ROUND2_TITLE || 'Beat the AI')}
+                        {import.meta.env.VITE_ROUND1_TITLE || 'Fix The Dataset'}
                     </h2>
                     <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem', marginTop: '4px' }}>
                         Player: <span style={{ color: 'var(--color-blue)' }}>{playerName}</span>
@@ -136,7 +124,7 @@ const Game = ({ playerName, onEnd }) => {
                         {timeLeft}s
                     </div>
                     <div style={{ color: 'var(--color-orange)', fontSize: '1.2rem', fontWeight: 'bold' }}>
-                        Score: {currentScore}
+                        Score: {score}
                     </div>
                 </div>
             </div>

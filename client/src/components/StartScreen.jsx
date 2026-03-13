@@ -27,6 +27,15 @@ const StartScreen = ({ onStart, onViewLeaderboard }) => {
 
             <p className="subtitle">Can you clean data faster than AI?</p>
 
+            <div style={{ background: 'rgba(255,255,255,0.1)', padding: '1rem', borderRadius: '8px', marginBottom: '2rem', textAlign: 'center' }}>
+                <div style={{ marginBottom: '0.5rem' }}>
+                    <span style={{ color: 'var(--color-success)', fontWeight: 'bold', fontSize: '1.2rem' }}>+10 Points</span> for correct answers
+                </div>
+                <div>
+                    <span style={{ color: 'var(--color-error)', fontWeight: 'bold', fontSize: '1.2rem' }}>-5 Points</span> for wrong answers (Negative Marking!)
+                </div>
+            </div>
+
             <form onSubmit={handleSubmit} style={{ marginBottom: '3rem' }}>
                 <input
                     type="text"
